@@ -4,6 +4,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const ejs = require("ejs");
+const cookie_parsser = require("cookie-parser");
+const db = require("./util/db");
+const Leads = require("./models/leads");
+const Employee = require("./models/employee");
+const User_credentials = require("./models/user_credentials");
 
 // Create an instance of the Express application
 const app = express();
@@ -14,19 +19,32 @@ app.use(express.static(path.join(__dirname, "public")));
 // Middleware to handle JSON and form data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookie_parsser());
 
 // Set the view engine to EJS for rendering templates
 app.set("view engine", "ejs");
 
-// Define a route for the root URL ("/") and render a "test" view
-app.get("/", (req, res) => {
-  res.render("test");
-});
+// Define routes
+app.use("/", require("./server/routes/user_route"));
+app.use("/employee", require("./server/routes/employee_route"));
 
-// Determine the port to listen on (process.env.PORT for Heroku, or 3000 by default)
-const port = process.env.PORT || 3000;
+// Define associations
+User_credentials.hasOne(Employee);
 
-// Start the server and listen on the specified port
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// Determine the port to listen on (process.env.PORT for Heroku, or 5000 by default)
+const port = process.env.PORT || 5000;
+
+// Connect to the database and start the server
+async function startServer() {
+  try {
+    await db.sync();
+    console.log("Database is connected");
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+startServer();
