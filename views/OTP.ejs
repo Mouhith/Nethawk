@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nethawk - Enter OTP</title>
+    <link rel="stylesheet" href="/css/login.css" />
+    <!-- favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/nuron-fevicon.png" />
+    <!-- font awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- bootstrap cdn -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+    <!-- bootstrap cdn -->
+  </head>
+  <body>
+    <div class="otp-login-main-container">
+      <div class="container1 container12">
+        <div class="left-image-container"></div>
+        <div class="content-container">
+          <div class="icon-container" style="margin-top: -9px">
+            <i
+              class="fa fa-envelope"
+              style="font-size: 40px"
+              aria-hidden="true"
+            ></i>
+          </div>
+          <p class="title1">Verification code</p>
+          <p class="text4">
+            please enter <span>4 digit</span> OTP sent to your mobile number
+          </p>
+          <form action="">
+            <div class="input-container2">
+              <input
+                type="number"
+                placeholder="Enter OTP"
+                class="input-style2"
+                required
+                max="4"
+              />
+              <p id="timer">Time remaining: <span>2:00</span></p>
+
+              <a href="#" class="resend-link" id="resendLink">Resend Code</a>
+            </div>
+            <button type="button" class="send-button2">Verify</button>
+            <div class="blob"></div>
+            <div class="blob1"></div>
+            <div class="blob2"></div>
+            <div class="blob3"></div>
+            <!-- <div class="blob4"></div>
+              <div class="blob5"></div> -->
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- js -->
+    <script>
+      let timer = 5;
+
+      // Function to update the timer
+      function updateTimer() {
+        const minutes = Math.floor(timer / 60);
+        const seconds = timer % 60;
+        document.getElementById(
+          "timer"
+        ).textContent = `Time remaining: ${minutes}:${
+          seconds < 10 ? "0" : ""
+        }${seconds}`;
+        if (timer > 0) {
+          timer--;
+          setTimeout(updateTimer, 1000); // Update the timer every second
+        } else {
+          document.getElementById("timer").style.display = "none";
+          document.getElementById("resendLink").style.display = "block";
+        }
+      }
+
+      updateTimer();
+
+      document
+        .getElementById("verifyButton")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          //   timer = 0;
+          updateTimer();
+        });
+    </script>
+  </body>
+</html>
