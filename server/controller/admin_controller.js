@@ -86,6 +86,22 @@ exports.createRoles = async (req, res, next) => {
   }
 };
 
+exports.deleteRoles = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+
+    const data = await Roles.destroy({ where: { role_id: id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find user" });
+    }
+    res.status(200).json({ message: "delete" });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.getRoles = async (req, res, next) => {
   try {
     const data = await Roles.findAll();
