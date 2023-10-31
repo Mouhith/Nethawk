@@ -23,6 +23,7 @@ const {
   update_Inventory_type,
   get_Inventory,
   get_Inventory_type,
+  deleteRoles,
 } = require("../controller/admin_controller");
 
 routes.get("/employee", authentication, getEmployee);
@@ -30,7 +31,7 @@ routes.post("/employee", authentication, employeeCreation);
 routes.patch("/employee/:id", authentication, Updateemployee);
 
 routes.post("/roles", authentication, createRoles);
-
+routes.delete("/roles/:id", authentication, deleteRoles);
 routes.get("/roles", authentication, getRoles);
 routes.patch("/roles/:id", authentication, editRoles);
 routes.get("/state", authentication, get_states);
