@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&family=Caveat:wght@400;700&family=Lobster&family=Monoton&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display+SC:ital,wght@0,400;0,700;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,700&family=Work+Sans:ital,wght@0,400;0,700;1,700&display=swap");
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: roboto;
+}
+body {
+  width: 100%;
+  /* overflow: hidden; */
+}
+.result-main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.left-container {
+  width: 200px;
+  background-color: #b85890;
+  background-color: #52286d;
+
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.nuron-logo-styling {
+  width: 210px;
+  margin-left: -5px;
+}
+.dropbtn {
+  color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.dropdown1 {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 110px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  border-radius: 5px;
+  top: 0;
+  left: 100%;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 10px 12px;
+  text-decoration: none;
+  display: block;
+}
+.dropdown-content a:hover {
+  text-decoration: none;
+  color: #e62428;
+}
+
+.dropdown-content button:hover {
+  background-color: #ddd;
+}
+
+.dropdown1:hover .dropdown-content {
+  display: block;
+}
+.right-container {
+  width: 100%;
+  min-height: 100vh;
+}
+.texttt {
+  /* background-color: #7a7272; */
+  background-color: #52286d;
+  background-color: #e4118c;
+
+  color: #fff;
+  padding-top: 9px;
+  padding-bottom: 6px;
+
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.texttt h3 {
+  font-size: 20px;
+}
+.image-style {
+  height: 93.4vh;
+  /* border: 10px solid #b85890; */
+  border-left: 0;
+}

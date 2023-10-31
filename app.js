@@ -34,6 +34,11 @@ User_credentials.hasOne(Employee);
 // Determine the port to listen on (process.env.PORT for Heroku, or 5000 by default)
 const port = process.env.PORT || 5000;
 
+///atest path
+
+app.get("/test", (req, res) => {
+  res.render("Login");
+});
 // Connect to the database and start the server
 async function startServer() {
   try {
