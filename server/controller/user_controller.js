@@ -3,7 +3,7 @@ const Leads = require("../../models/leads");
 const crypto = require("../tools/crypto");
 const otp = require("../tools/otp");
 const sms = require("../tools/sms");
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
   try {
     // Validate user input
     const { error, value } = schema.loginSchema.validate(req.body);
@@ -32,13 +32,12 @@ exports.login = async (req, res) => {
     // Send a success response
     await sms(otpdata, value.phone_num);
     res.status(200).json({ message: "Cookie has been set." });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.otpVerification = async (req, res) => {
+exports.otpVerification = async (req, res, next) => {
   try {
     const { otpr } = req.body;
     const cookie = req.cookies["nu_tp"];
@@ -57,11 +56,20 @@ exports.otpVerification = async (req, res) => {
     if (!isOtpValid) {
       return res.status(400).json({ error: "Invalid OTP" });
     }
-
+    const result = await Leads.findOne({
+      where: { phone_num: data.user, lead_id: data.user_id },
+    });
+    if (!result) {
+      res.status(404).json({ error: "User Not Found" });
+    }
+    const cookie_data = {
+      user_id: result.phone_num,
+    };
+    const encryptdata = await crypto.encrypt(cookie_data);
     res.clearCookie("nu_tp");
+    res.cookie("NU-NLIC", encryptdata);
     res.status(200).json({ message: "OTP verified" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
   }
 };

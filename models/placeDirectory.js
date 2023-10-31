@@ -11,6 +11,7 @@ const States = db.define("State", {
   state_name: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
 });
 
@@ -22,8 +23,9 @@ const Town_City = db.define("Town_city", {
     autoIncrement: true,
   },
   name: {
-    type: DataTypes.States,
+    type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
 });
 
@@ -35,8 +37,9 @@ const Area = db.define("Area", {
     autoIncrement: true,
   },
   area_name: {
-    type: DataTypes.States,
+    type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
 });
 
