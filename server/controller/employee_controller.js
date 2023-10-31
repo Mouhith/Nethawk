@@ -1,0 +1,75 @@
+const Leads = require("../../models/leads");
+const Schedule = require("../../models/schedule");
+const { leadSchema, scheduleSchema } = require("../validation/schema");
+const regSchedule = require("../tools/scheduler");
+exports.leadCreation = async (req, res, next) => {
+  try {
+    // Validate the request body with Joi
+    const { error, value } = leadSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    // Create the lead
+    const response = await Leads.create(value);
+
+    // Send a successful response
+    res
+      .status(200)
+      .json({ message: "Lead created successfully", data: response });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.scheduleCreation = async (req, res, next) => {
+  try {
+    const { error, value } = scheduleSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const data = await Schedule.create(value);
+    regSchedule(data.Booking_datetime_to, "test");
+    res.status(201).json({ message: "success !!", data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.scheduleUpdate = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: "ID is a required field !!" });
+    }
+
+    const { error, value } = scheduleSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    const data = await Schedule.update(value, {
+      where: {
+        Schedule_id: id,
+      },
+    });
+
+    if (data[0] == 0) {
+      return res.status(400).json({ error: "Invalid ID !!" });
+    }
+    res.status(201).json({ message: "successfully Updated !!", data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getschedule = async (req, res, next) => {
+  try {
+    const data = await Schedule.findAll();
+    console.log("helo");
+    res.status(200).json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
