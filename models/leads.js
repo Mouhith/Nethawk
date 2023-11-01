@@ -44,6 +44,11 @@ const Leads = db.define("Lead", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  lead_status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "Pending",
+  },
 });
 
 module.exports = Leads;

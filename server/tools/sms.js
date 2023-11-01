@@ -1,11 +1,21 @@
 const axios = require("axios");
+const https = require("https"); // Import the 'https' module for custom httpsAgent
+const crypto = require("crypto");
+
+const options = {
+  request: axios.create({
+    httpsAgent: new https.Agent({
+      secureOptions: crypto.constants.SSL_OP_LEGACY_SERVER_CONNECT,
+    }),
+  }),
+};
 
 const sendSMS = async (otp, mobile_no) => {
   try {
     const url = "https://enterprise.smsgupshup.com/GatewayAPI/rest";
 
     const params = {
-      msg: `Dear Patron, Kindly click on this link to verify your mobile number ${otp}. Regards Team Nuron`,
+      msg: `Dear Customer your OTP for verification is ${otp} Rgds Nuron`,
       v: "1.1",
       userid: process.env.SMS_GUPSHUP_USERID,
       password: process.env.SMS_GUPSHUP_PASSWORD,
@@ -14,7 +24,7 @@ const sendSMS = async (otp, mobile_no) => {
       method: "sendMessage",
     };
 
-    const response = await axios.post(url, null, { params });
+    const response = await options.request.post(url, null, { params });
 
     if (response.status === 200) {
       return "SMS sent successfully";

@@ -8,66 +8,75 @@ const Result = db.define("Result", {
     primaryKey: true,
     autoIncrement: true,
   },
-  stream_pr: {
+  STREAM_PR: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  stream_quality_preloading_time_ms: {
+  STREAM_QUALITY_PRELOADING_TIME: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_upload_file_peak: {
+  SPEED_UPLOAD_LOADED_LATENCY: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_upload_file_avg_excl_slowstart: {
+  SPEED_UPLOAD_LOADED_JITTER: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_latency_avg: {
+  SPEED_UPLOAD_DURATION: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 
-  speed_latency_jitter: {
+  SPEED_UPLOAD_PEAK: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  browse_url_loading_time: {
+  SPEED_UPLOAD_AVG_EXCL_SLOWSTART: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_download_loaded_latency: {
+  SPEED_LATENCY_AVG: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_download_loaded_jitter: {
+  SPEED_LATENCY_JITTER: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_download_duration: {
+  BROWSE_URL_LOADING_TIME: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_download_file_peak: {
+  SPEED_DOWNLOAD_LOADED_LATENCY: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_download_file_avg_excl_slowstart: {
+  SPEED_DOWNLOAD_LOADED_JITTER: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_download_packetloss: {
+  SPEED_DOWNLOAD_DURATION: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_download_peak: {
+  SPEED_DOWNLOAD_AVG_EXCL_SLOWSTART: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  speed_download_avg_excl_slowstart: {
+  SPEED_DOWNLOAD_PACKETLOSS: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  SCHEDULING_NAME: {
+    type: DataTypes.STRING,
+  },
+  TEST_TYPE: {
+    type: DataTypes.STRING,
+  },
+  DATETIME_UTC: {
+    type: DataTypes.DATE,
   },
 });
 

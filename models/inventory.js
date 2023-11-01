@@ -41,6 +41,7 @@ const Inventory_type = db.define("Inventory_type", {
     type: DataTypes.STRING,
 
     allowNull: false,
+    unique: true,
   },
 });
 
