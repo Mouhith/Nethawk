@@ -23,6 +23,59 @@ exports.leadCreation = async (req, res, next) => {
   }
 };
 
+exports.updateLead = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: "ID is a required field !!" });
+    }
+    // Validate the request body with Joi
+    const { error, value } = leadSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    // Create the lead
+    const data = await Leads.update(value, {
+      where: { lead_id: id },
+    });
+
+    // Send a successful response
+    if (data[0] == 0) {
+      return res.status(400).json({ error: "Invalid ID !!" });
+    }
+    res.status(201).json({ message: "successfully Updated !!", data });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.deleteLeads = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+
+    const data = await Leads.destroy({ where: { lead_id: id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find the Lead" });
+    }
+    res.status(200).json({ message: "delete" });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getLeads = async (req, res, next) => {
+  try {
+    const data = await Leads.findAll();
+
+    res.status(200).json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.scheduleCreation = async (req, res, next) => {
   try {
     const { error, value } = scheduleSchema.validate(req.body);
@@ -67,8 +120,24 @@ exports.scheduleUpdate = async (req, res, next) => {
 exports.getschedule = async (req, res, next) => {
   try {
     const data = await Schedule.findAll();
-    console.log("helo");
+
     res.status(200).json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.deleteSchedule = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+
+    const data = await Schedule.destroy({ where: { Schedule_id: id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find the Schedule" });
+    }
+    res.status(200).json({ message: "delete" });
   } catch (error) {
     next(error);
   }
