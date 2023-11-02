@@ -56,11 +56,12 @@ Leads.belongsTo(User_credentials);
 States.hasMany(Town_City);
 Town_City.belongsTo(States);
 Town_City.hasMany(Area);
-Area.belongsTo(Town_City);
+
 Inventory_type.hasMany(Inventory);
-Inventory.belongsTo(Inventory_type);
+
 Area.hasMany(Inventory);
-Inventory.belongsTo(Area);
+States.hasMany(Inventory);
+Town_City.hasMany(Inventory);
 Leads.hasOne(Schedule);
 Schedule.belongsTo(Leads);
 Inventory.hasOne(Schedule);
