@@ -20,6 +20,8 @@ const employeeSchema = joi.object({
   employee_name: joi.string().required(),
   employee_email: joi.string().email().required(),
   employee_phone_no: joi.string().length(10).required(),
+  RoleRoleId: joi.string(),
+  UserCredentialId: joi.string(),
 });
 
 const roleSchema = joi.object({
@@ -31,9 +33,11 @@ const stateSchema = joi.object({
 });
 const town_city_Schema = joi.object({
   name: joi.string().required(),
+  StateStateId: joi.string(),
 });
 const areaSchema = joi.object({
   area_name: joi.string().required(),
+  TownCityTownCityId: joi.string(),
 });
 
 const inventory_types_schema = joi.object({
@@ -44,6 +48,10 @@ const inventorySchema = joi.object({
   mac_address: joi.string().required(),
   date_onboarded: joi.string().required(),
   fleet_no: joi.string().required(),
+  AreaAreaId: joi.string(),
+  TownCityTownCityId: joi.string(),
+  StateStateId: joi.string(),
+  InventoryTypeId: joi.string(),
 });
 
 const scheduleSchema = joi.object({
@@ -54,6 +62,8 @@ const scheduleSchema = joi.object({
   fleet_no: joi.string().required(),
   scenario_name: joi.string().required(),
   scheduling_name: joi.string().required(),
+  LeadLeadId: joi.string(),
+  InventoryId: joi.string(),
 });
 
 module.exports = {
