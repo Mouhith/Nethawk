@@ -15,7 +15,7 @@ const sendSMS = async (otp, mobile_no) => {
     const url = "https://enterprise.smsgupshup.com/GatewayAPI/rest";
 
     const params = {
-      msg: `Dear Customer your OTP for verification is ${otp} Rgds Nuron`,
+      msg: ` Dear Customer your OTP for verification is ${otp} Rgds Nuron`,
       v: "1.1",
       userid: process.env.SMS_GUPSHUP_USERID,
       password: process.env.SMS_GUPSHUP_PASSWORD,

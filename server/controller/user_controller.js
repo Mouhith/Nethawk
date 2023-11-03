@@ -3,12 +3,28 @@ const Leads = require("../../models/leads");
 const crypto = require("../tools/crypto");
 const otp = require("../tools/otp");
 const sms = require("../tools/sms");
-exports.login = async (req, res, next) => {
+
+exports.login = (req, res, next) => {
+  try {
+    if (req.cookies["NU-NLIC"]) {
+      return res.status(201).redirect("/dashboard");
+    }
+
+    res.render("login", { message: "" });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.postLogin = async (req, res, next) => {
   try {
     // Validate user input
     const { error, value } = schema.loginSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      return res
+        .status(400)
+        .render("login", { message: error.details[0].message });
     }
 
     // Check if the user exists in the database
@@ -17,7 +33,9 @@ exports.login = async (req, res, next) => {
     });
 
     if (!result) {
-      return res.status(404).json({ error: "Invalid user / No user found" });
+      return res
+        .status(400)
+        .render("login", { message: "Invalid user / No user found" });
     }
     const otpdata = await otp.generateOtp();
     const data = {
@@ -27,11 +45,12 @@ exports.login = async (req, res, next) => {
     };
     const encryptedData = await crypto.encrypt(data);
 
-    res.cookie("nu_tp", encryptedData, { maxAge: 150000 });
+    res.cookie("NU-NLIC", encryptedData, { maxAge: 150000 });
 
     // Send a success response
     await sms(otpdata, value.phone_num);
-    res.status(200).json({ message: "Cookie has been set." });
+
+    res.render("otp", { message: "" });
   } catch (error) {
     next(error);
   }
@@ -40,21 +59,23 @@ exports.login = async (req, res, next) => {
 exports.otpVerification = async (req, res, next) => {
   try {
     const { otpr } = req.body;
-    const cookie = req.cookies["nu_tp"];
+    const cookie = req.cookie;
 
     if (!cookie) {
-      return res.status(400).json({ error: "Missing or expired OTP cookie" });
+      return res.status(400).render("otp", {
+        message: "Invalid user / requested OTP from another device",
+      });
     }
 
     const data = await crypto.decryption(cookie);
 
     if (data.otp !== otpr) {
-      return res.status(400).json({ error: "Incorrect OTP" });
+      return res.status(400).render("otp", { message: "Incorrect OTP" });
     }
 
     const isOtpValid = await otp.verifyOtp(otpr);
     if (!isOtpValid) {
-      return res.status(400).json({ error: "Invalid OTP" });
+      return res.status(400).render("otp", { message: "Invalid OTP" });
     }
     const result = await Leads.findOne({
       where: { phone_num: data.user, lead_id: data.user_id },
@@ -66,10 +87,27 @@ exports.otpVerification = async (req, res, next) => {
       user_id: result.phone_num,
     };
     const encryptdata = await crypto.encrypt(cookie_data);
-    res.clearCookie("nu_tp");
+    res.clearCookie("NU-NLIC");
     res.cookie("NU-NLIC", encryptdata);
-    res.status(200).json({ message: "OTP verified" });
+    res.status(200).redirect("/dashboard");
   } catch (error) {
+    next(error);
+  }
+};
+
+exports.getDashboard = (req, res, next) => {
+  try {
+    res.status(200).render("dashboard");
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.logout = async (req, res, next) => {
+  try {
+    res.clearCookie("NU-NLIC");
+    res.status(302).redirect("/");
+  } catch {
     next(error);
   }
 };
