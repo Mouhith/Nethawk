@@ -70,6 +70,22 @@ exports.Updateemployee = async (req, res, next) => {
   }
 };
 
+exports.deleteEmployee = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+    const data = await Employee.destroy({ where: { employee_id: id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find user" });
+    }
+    res.status(200).json({ message: "delete" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.createRoles = async (req, res, next) => {
   try {
     const { error, value } = roleSchema.validate(req.body);
@@ -86,6 +102,22 @@ exports.createRoles = async (req, res, next) => {
   }
 };
 
+exports.deleteRoles = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+
+    const data = await Roles.destroy({ where: { role_id: id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find the Role" });
+    }
+    res.status(200).json({ message: "delete" });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.getRoles = async (req, res, next) => {
   try {
     const data = await Roles.findAll();
@@ -162,7 +194,21 @@ exports.edit_state = async (req, res, next) => {
     next(error);
   }
 };
-
+exports.deleteState = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+    const data = await States.destroy({ where: { state_id: id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find State" });
+    }
+    res.status(200).json({ message: "delete" });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.get_states = async (req, res, next) => {
   try {
     const data = await States.findAll();
@@ -208,6 +254,21 @@ exports.update_town = async (req, res, next) => {
     res.status(201).json({
       Message: "Updata successful !!!",
     });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.deleteTown = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+    const data = await Town_City.destroy({ where: { town_city_id: id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find Town" });
+    }
+    res.status(200).json({ message: "delete" });
   } catch (error) {
     next(error);
   }
@@ -262,7 +323,21 @@ exports.update_area = async (req, res, next) => {
     next(error);
   }
 };
-
+exports.deleteArea = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+    const data = await Area.destroy({ where: { area_id: id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find Area" });
+    }
+    res.status(200).json({ message: "delete" });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.get_area = async (req, res, next) => {
   try {
     const data = await Area.findAll();
@@ -309,6 +384,22 @@ exports.update_Inventory_type = async (req, res, next) => {
     res.status(201).json({
       Message: "Updata successful !!!",
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.delete_inventory_type = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+    const data = await Inventory_type.destroy({ where: { id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find in DataBase" });
+    }
+    res.status(200).json({ message: "delete" });
   } catch (error) {
     next(error);
   }
@@ -363,7 +454,21 @@ exports.update_Inventory = async (req, res, next) => {
     next(error);
   }
 };
-
+exports.delete_inventoey = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(401).json({ error: "Id is required" });
+    }
+    const data = await Inventory.destroy({ where: { id } });
+    if (data === 0) {
+      return res.status(400).json({ error: "can not find Inventory" });
+    }
+    res.status(200).json({ message: "delete" });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.get_Inventory = async (req, res, next) => {
   try {
     const data = await Inventory.findAll();
