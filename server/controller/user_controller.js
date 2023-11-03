@@ -107,7 +107,7 @@ exports.logout = async (req, res, next) => {
   try {
     res.clearCookie("NU-NLIC");
     res.status(302).redirect("/");
-  } catch {
+  } catch (error) {
     next(error);
   }
 };
