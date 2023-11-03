@@ -7,7 +7,7 @@ const sms = require("../tools/sms");
 exports.login = (req, res, next) => {
   try {
     if (req.cookies["NU-NLIC"]) {
-      return res.status(201).redirect("/dashboard");
+      return res.status(201).redirect("/Dashboard");
     }
 
     res.render("Login", { message: "" });
@@ -24,7 +24,7 @@ exports.postLogin = async (req, res, next) => {
     if (error) {
       return res
         .status(400)
-        .render("login", { message: error.details[0].message });
+        .render("Login", { message: error.details[0].message });
     }
 
     // Check if the user exists in the database
@@ -35,7 +35,7 @@ exports.postLogin = async (req, res, next) => {
     if (!result) {
       return res
         .status(400)
-        .render("login", { message: "Invalid user / No user found" });
+        .render("Login", { message: "Invalid user / No user found" });
     }
     const otpdata = await otp.generateOtp();
     const data = {
@@ -50,7 +50,7 @@ exports.postLogin = async (req, res, next) => {
     // Send a success response
     await sms(otpdata, value.phone_num);
 
-    res.render("otp", { message: "" });
+    res.render("Otp", { message: "" });
   } catch (error) {
     next(error);
   }
@@ -62,7 +62,7 @@ exports.otpVerification = async (req, res, next) => {
     const cookie = req.cookie;
 
     if (!cookie) {
-      return res.status(400).render("otp", {
+      return res.status(400).render("Otp", {
         message: "Invalid user / requested OTP from another device",
       });
     }
@@ -70,12 +70,12 @@ exports.otpVerification = async (req, res, next) => {
     const data = await crypto.decryption(cookie);
 
     if (data.otp !== otpr) {
-      return res.status(400).render("otp", { message: "Incorrect OTP" });
+      return res.status(400).render("Otp", { message: "Incorrect OTP" });
     }
 
     const isOtpValid = await otp.verifyOtp(otpr);
     if (!isOtpValid) {
-      return res.status(400).render("otp", { message: "Invalid OTP" });
+      return res.status(400).render("Otp", { message: "Invalid OTP" });
     }
     const result = await Leads.findOne({
       where: { phone_num: data.user, lead_id: data.user_id },
@@ -89,7 +89,7 @@ exports.otpVerification = async (req, res, next) => {
     const encryptdata = await crypto.encrypt(cookie_data);
     res.clearCookie("NU-NLIC");
     res.cookie("NU-NLIC", encryptdata);
-    res.status(200).redirect("/dashboard");
+    res.status(200).redirect("/Dashboard");
   } catch (error) {
     next(error);
   }
@@ -97,7 +97,7 @@ exports.otpVerification = async (req, res, next) => {
 
 exports.getDashboard = (req, res, next) => {
   try {
-    res.status(200).render("dashboard");
+    res.status(200).render("Dashboard");
   } catch (error) {
     next(error);
   }
