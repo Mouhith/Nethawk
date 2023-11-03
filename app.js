@@ -37,7 +37,7 @@ app.use("/admin", require("./server/routes/admin_route"));
 app.use((err, req, res, next) => {
   let status = 500;
   let message = "Internal server error";
-
+console.log(err);
   if (err.name === "SequelizeUniqueConstraintError") {
     status = 400;
     message = err.errors[0].message;
