@@ -28,7 +28,7 @@ app.use(cookie_parsser());
 
 // Set the view engine to EJS for rendering templates
 app.set("view engine", "ejs");
-
+app.set("views", path.join(__dirname, "views"));
 // Define routes
 app.use("/", require("./server/routes/user_route"));
 app.use("/employee", require("./server/routes/employee_route"));
