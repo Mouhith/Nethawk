@@ -4,16 +4,7 @@ const crypto = require("crypto");
 
 const options = {
   request: axios.create({
-<<<<<<< HEAD
-    // axios options
     httpsAgent: new https.Agent({
-      // For self-signed certificates, you can add:
-      // rejectUnauthorized: false,
-
-      // Allow legacy servers (this line is already in your code)
-=======
-    httpsAgent: new https.Agent({
->>>>>>> 8e8c61175294f47613a33e3aa583869d61ea1a51
       secureOptions: crypto.constants.SSL_OP_LEGACY_SERVER_CONNECT,
     }),
   }),
