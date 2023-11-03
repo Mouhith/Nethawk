@@ -7,7 +7,6 @@
 }
 body {
   width: 100%;
-  /* overflow: hidden; */
 }
 .result-main-container {
   display: flex;
@@ -54,6 +53,7 @@ body {
   border-radius: 5px;
   top: 0;
   left: 100%;
+  z-index: 1000;
 }
 
 .dropdown-content a {
@@ -79,7 +79,6 @@ body {
   min-height: 100vh;
 }
 .texttt {
-  /* background-color: #7a7272; */
   background-color: #52286d;
   background-color: #e4118c;
 
@@ -95,6 +94,9 @@ body {
 }
 .image-style {
   height: 93.4vh;
-  /* border: 10px solid #b85890; */
   border-left: 0;
+}
+
+.export-btn {
+  z-index: 1000;
 }

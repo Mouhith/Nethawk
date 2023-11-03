@@ -39,7 +39,7 @@
     ></script>
     <!-- bootstrap cdn -->
   </head>
-  <body>
+  <body action="/dashboard" method="post">
     <div class="result-main-container">
       <div class="left-container">
         <img
@@ -53,7 +53,7 @@
             <i class="fa fa-angle-down" aria-hidden="true"></i>
           </button>
           <div class="dropdown-content">
-            <a href="#"
+            <a href="./login.ejs"
               >Logout <i class="fa fa-sign-out ml-1" aria-hidden="true"></i
             ></a>
           </div>
@@ -93,23 +93,22 @@
               </div>
               <div class="carousel-item">
                 <div class="texttt d-flex justify-content-between">
-                  <h3>Enterprise 1</h3>
-                  <h3>Comparision Report</h3>
-                  <h3>Test Date: 00/00/00</h3>
-                  <h3>Start Time: 00:00:00</h3>
-                  <h3>End Time: 00:00:00</h3>
+                  <h3 class="mt-2">Enterprise 1</h3>
+                  <h3 class="mt-2">Comparision Report</h3>
+                  <h3 class="mt-2">Test Date: 00/00/00</h3>
+                  <h3 class="mt-2">Start Time: 00:00:00</h3>
+                  <h3 class="mt-2">End Time: 00:00:00</h3>
+                  <button class="btn btn-success export-btn">
+                    Export raw data
+                  </button>
                 </div>
 
                 <img
                   class="d-block w-100 image-style"
+                  style="height: 92vh"
                   src="/images/image.png"
                   alt="Third slide"
                 />
-                <!-- <div class="export-btn-div">
-                  <button class="btn btn-success export-btn">
-                    Export raw data
-                  </button>
-                </div> -->
               </div>
             </div>
             <a
