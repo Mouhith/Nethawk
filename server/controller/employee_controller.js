@@ -2,6 +2,7 @@ const Leads = require("../../models/leads");
 const Schedule = require("../../models/schedule");
 const { leadSchema, scheduleSchema } = require("../validation/schema");
 const regSchedule = require("../tools/scheduler");
+const nPerf = require("../tools/results");
 exports.leadCreation = async (req, res, next) => {
   try {
     // Validate the request body with Joi
@@ -138,6 +139,15 @@ exports.deleteSchedule = async (req, res, next) => {
       return res.status(400).json({ error: "can not find the Schedule" });
     }
     res.status(200).json({ message: "delete" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.nperf = async (req, res, next) => {
+  try {
+    const resp = await nPerf();
+    res.status(200).json({ resp });
   } catch (error) {
     next(error);
   }

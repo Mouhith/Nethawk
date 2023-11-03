@@ -23,20 +23,20 @@ const nPerf_API = async () => {
           for (const obj of arrayOfData) {
             const conversionFactor = 1 / Math.pow(10, 6);
             const result = await processTestData(obj, conversionFactor);
-            console.log(typeof result);
+
             finalResults.push(result);
           }
-          console.log(finalResults);
-          console.log("All data processed and stored in finalResults array.");
+
+          return "All data processed and stored in finalResults array.";
         } else {
-          console.log(`Error: ${response.status}, ${response.data}`);
+          return `Error: ${response.status}, ${response.data}`;
         }
       } else {
-        console.log("No result's found");
+        return "No result's found";
       }
     })
     .catch((error) => {
-      console.error(error);
+      return error;
     });
 
   // Function to process and return data for a single object

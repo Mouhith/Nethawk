@@ -25,6 +25,6 @@ routes.delete(
 );
 
 routes.get("/schedule", authentication, employee_controller.getschedule);
-
+routes.get("/nPerf", authentication, employee_controller.nperf);
 // Export the router for use in other parts of the application
 module.exports = routes;
