@@ -62,6 +62,7 @@ const scheduleSchema = joi.object({
   fleet_no: joi.string().required(),
   scenario_name: joi.string().required(),
   scheduling_name: joi.string().required(),
+  scheduler_job_id: joi.string().required(),
   LeadLeadId: joi.string(),
   InventoryId: joi.string(),
 });

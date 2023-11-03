@@ -102,3 +102,12 @@ exports.getDashboard = (req, res, next) => {
     next(error);
   }
 };
+
+exports.logout = async (req, res, next) => {
+  try {
+    res.clearCookie("NU-NLIC");
+    res.status(302).redirect("/");
+  } catch {
+    next(error);
+  }
+};

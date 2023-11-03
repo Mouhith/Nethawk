@@ -3,7 +3,7 @@ exports.userAuth = async (req, res, next) => {
     const cookiee = req.cookies["NU-NLIC"];
 
     if (!cookiee) {
-      return res.status(200).redirect("/login");
+      return res.status(200).redirect("/");
     }
 
     req.cookie = cookiee;
