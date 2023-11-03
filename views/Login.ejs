@@ -90,6 +90,26 @@
             </div>
 
             <button type="submit" class="send-button">Send OTP</button>
+            <%if(message){%>
+
+            <div
+              class="alert alert-warning alert-dismissible fade show alert-msg-style d-md-none"
+              style="position: absolute; top: -140px; z-index: 10000"
+              id="alertID1"
+              role="alert"
+            >
+              <strong><%= message %></strong>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <%}%>
 
             <div class="blob"></div>
             <div class="blob1"></div>
@@ -103,6 +123,7 @@
       const myTimeout = setTimeout(errorDisplay, 7000);
       function errorDisplay() {
         document.getElementById("alertID").style.display = "none";
+        document.getElementById("alertID1").style.display = "none";
       }
     </script>
   </body>

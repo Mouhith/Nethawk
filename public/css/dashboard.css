@@ -100,3 +100,56 @@ body {
 .export-btn {
   z-index: 1000;
 }
+.div1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.loader {
+  border-radius: 50%;
+  /* border: 12px solid #f3f3f3;
+  border-top: 12px solid #b12068;
+  width: 80px;
+  height: 80px; */
+
+  border: 6px dotted #52286d;
+  border-top: 6px dotted #52286d;
+  width: 40px;
+  height: 40px;
+
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  margin-top: 13px;
+  font-size: 17px;
+  color: #52286d;
+  font-weight: 600;
+}
+.para-style {
+  font-size: 16px;
+  color: #52286d;
+
+  font-weight: 600;
+}

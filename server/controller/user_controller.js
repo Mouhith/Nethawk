@@ -6,9 +6,9 @@ const sms = require("../tools/sms");
 
 exports.login = (req, res, next) => {
   try {
-    if (req.cookies["NU-NLIC"]) {
-      return res.status(201).redirect("/dashboard");
-    }
+    // if (req.cookies["NU-NLIC"]) {
+    //   return res.status(201).redirect("/dashboard");
+    // }
 
     res.render("login", { message: "" });
   } catch (error) {
