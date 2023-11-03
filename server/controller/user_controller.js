@@ -50,7 +50,7 @@ exports.postLogin = async (req, res, next) => {
     // Send a success response
     await sms(otpdata, value.phone_num);
 
-    res.render("Otp", { message: "" });
+    res.render("OTP", { message: "" });
   } catch (error) {
     next(error);
   }
@@ -62,7 +62,7 @@ exports.otpVerification = async (req, res, next) => {
     const cookie = req.cookie;
 
     if (!cookie) {
-      return res.status(400).render("Otp", {
+      return res.status(400).render("OTP", {
         message: "Invalid user / requested OTP from another device",
       });
     }
@@ -70,12 +70,12 @@ exports.otpVerification = async (req, res, next) => {
     const data = await crypto.decryption(cookie);
 
     if (data.otp !== otpr) {
-      return res.status(400).render("Otp", { message: "Incorrect OTP" });
+      return res.status(400).render("OTP", { message: "Incorrect OTP" });
     }
 
     const isOtpValid = await otp.verifyOtp(otpr);
     if (!isOtpValid) {
-      return res.status(400).render("Otp", { message: "Invalid OTP" });
+      return res.status(400).render("OTP", { message: "Invalid OTP" });
     }
     const result = await Leads.findOne({
       where: { phone_num: data.user, lead_id: data.user_id },
