@@ -6,9 +6,9 @@ const sms = require("../tools/sms");
 
 exports.login = (req, res, next) => {
   try {
-    if (req.cookies["NU-NLIC"]) {
-      return res.status(201).redirect("/dashboard");
-    }
+    // if (req.cookies["NU-NLIC"]) {
+    //   return res.status(201).redirect("/dashboard");
+    // }
 
     res.render("login", { message: "" });
   } catch (error) {
@@ -99,6 +99,15 @@ exports.getDashboard = (req, res, next) => {
   try {
     res.status(200).render("dashboard");
   } catch (error) {
+    next(error);
+  }
+};
+
+exports.logout = async (req, res, next) => {
+  try {
+    res.clearCookie("NU-NLIC");
+    res.status(302).redirect("/");
+  } catch {
     next(error);
   }
 };

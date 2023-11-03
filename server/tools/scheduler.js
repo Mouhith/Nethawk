@@ -6,6 +6,7 @@ const createSchedule = (date, jobName) => {
   const schuduleTime = new Date(date);
   console.log(date);
   const job = schedule.scheduleJob(jobName, schuduleTime, () => {
+    console.log("Schudelur is runninggg ");
     nPerf_API();
     console.log("Schudelur is runninggg ");
   });
