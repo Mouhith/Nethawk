@@ -39,8 +39,8 @@
     ></script>
     <!-- bootstrap cdn -->
   </head>
-  <body action="/dashboard" method="post">
-    <div class="result-main-container">
+  <body onload="myFunction()" method="post" action="/dashboard">
+    <div class="result-main-container" id="dashboard-id">
       <div class="left-container">
         <img
           src="/images/nuron white logo.png"
@@ -53,14 +53,23 @@
             <i class="fa fa-angle-down" aria-hidden="true"></i>
           </button>
           <div class="dropdown-content">
+<<<<<<< HEAD
+            <a href="#"
+=======
             <a href="/logout"
+>>>>>>> 86333aab17eb4b46b95bbb0880e90c100c1ec593
               >Logout <i class="fa fa-sign-out ml-1" aria-hidden="true"></i
             ></a>
           </div>
         </div>
       </div>
       <div class="right-container">
-        <div class="car-div1">
+        <div class="div1" id="div11">
+          <div class="loader"></div>
+          <p class="loading-text">Your results are loading...</p>
+          <p id="paraId" class="para-style"></p>
+        </div>
+        <div class="car-div1" style="display: none" id="dashboardId">
           <div
             id="carouselExampleIndicators"
             class="carousel slide"
@@ -141,5 +150,24 @@
         </div>
       </div>
     </div>
+    <!-- js -->
+    <script>
+      var myfun;
+      var myfun2;
+
+      function myFunction() {
+        myfun = setTimeout(showPage, 3000);
+        myfun2 = setTimeout(displayText, 2000);
+      }
+
+      function showPage() {
+        document.getElementById("div11").style.display = "none";
+        document.getElementById("dashboardId").style.display = "block";
+      }
+
+      function displayText() {
+        document.getElementById("paraId").textContent = "Almost There !!";
+      }
+    </script>
   </body>
 </html>
