@@ -10,7 +10,7 @@ exports.login = (req, res, next) => {
       return res.status(201).redirect("/dashboard");
     }
 
-    res.render("login", { message: "" });
+    res.render("Login", { message: "" });
   } catch (error) {
     console.log(error);
     next(error);
