@@ -3,7 +3,9 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const CronJob = require("cron").CronJob;
 const ejs = require("ejs");
+
 const cookie_parsser = require("cookie-parser");
 const db = require("./util/db");
 const Leads = require("./models/leads");
@@ -15,6 +17,8 @@ const Result = require("./models/result");
 const Roles = require("./models/roles");
 const Schedule = require("./models/schedule");
 const Test = require("./models/test");
+const crojob = require("./server/tools/crone");
+
 // Create an instance of the Express application
 const app = express();
 
@@ -33,6 +37,12 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/", require("./server/routes/user_route"));
 app.use("/employee", require("./server/routes/employee_route"));
 app.use("/admin", require("./server/routes/admin_route"));
+
+//test
+
+app.use("/test", (req, res) => {
+  res.render("test");
+});
 
 app.use((err, req, res, next) => {
   let status = 500;
@@ -80,8 +90,12 @@ async function startServer() {
   try {
     await db.sync();
     console.log("Database is connected");
-    app.listen(port, () => {
+    app.listen(port, async () => {
       console.log(`Server is running on port ${port}`);
+
+      const cronExpression = "*/3 * * * *";
+      const cronJob = new CronJob(cronExpression, crojob(), null, true, "UTC");
+      cronJob.start();
     });
   } catch (err) {
     console.error(err);

@@ -8,75 +8,173 @@ const Result = db.define("Result", {
     primaryKey: true,
     autoIncrement: true,
   },
-  STREAM_PR: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  testId: {
+    type: DataTypes.BIGINT,
   },
-  STREAM_QUALITY_PRELOADING_TIME: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  streamPr: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_UPLOAD_LOADED_LATENCY: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  streamQualityPreloadingTime: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_UPLOAD_LOADED_JITTER: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedUploadLoadedLatency: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_UPLOAD_DURATION: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedUploadLoadedJitter: {
+    type: DataTypes.DECIMAL,
+  },
+  speedUploadDuration: {
+    type: DataTypes.DECIMAL,
   },
 
-  SPEED_UPLOAD_PEAK: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedUploadPeak: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_UPLOAD_AVG_EXCL_SLOWSTART: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedUploadAvgExclFileSlowstart: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_LATENCY_AVG: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedLatencyAvg: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_LATENCY_JITTER: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedLatencyJitter: {
+    type: DataTypes.DECIMAL,
   },
-  BROWSE_URL_LOADING_TIME: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  browseUrlLoadingTime: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_DOWNLOAD_LOADED_LATENCY: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedDownloadLoadedLatency: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_DOWNLOAD_LOADED_JITTER: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedDownloadLoadedJitter: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_DOWNLOAD_DURATION: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedDownloadDuration: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_DOWNLOAD_AVG_EXCL_SLOWSTART: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedDownloadAvgExclFileSlowstart: {
+    type: DataTypes.DECIMAL,
   },
-  SPEED_DOWNLOAD_PACKETLOSS: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  speedDownloadAvgExclSlowstart: {
+    type: DataTypes.DECIMAL,
   },
-  SCHEDULING_NAME: {
+  leadsLeadId: {
     type: DataTypes.STRING,
   },
-  TEST_TYPE: {
+  speedDownloadPacketLoss: {
+    type: DataTypes.DECIMAL,
+  },
+  scheduling_name: {
     type: DataTypes.STRING,
   },
-  DATETIME_UTC: {
+  testType: {
+    type: DataTypes.STRING,
+  },
+  speedUploadFilePeak: {
+    type: DataTypes.DECIMAL,
+  },
+  speedUploadAvgExclSlowstart: {
+    type: DataTypes.DECIMAL,
+  },
+
+  speedDownloadFilePeak: {
+    type: DataTypes.DECIMAL,
+  },
+  speedDownloadPeak: {
+    type: DataTypes.DECIMAL,
+  },
+
+  datetimeUtc: {
     type: DataTypes.DATE,
+  },
+  startDateTimeUtc: {
+    type: DataTypes.DATE,
+  },
+  browserUrl: {
+    type: DataTypes.STRING,
+  },
+  isp: {
+    type: DataTypes.STRING,
+  },
+  streamStatus: {
+    type: DataTypes.STRING,
+  },
+  ///
+
+  other_streamPr: {
+    type: DataTypes.DECIMAL,
+  },
+  other_streamQualityPreloadingTime: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedUploadLoadedLatency: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedUploadLoadedJitter: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedUploadDuration: {
+    type: DataTypes.DECIMAL,
+  },
+
+  other_speedUploadPeak: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedUploadAvgExclFileSlowstart: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedLatencyAvg: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedLatencyJitter: {
+    type: DataTypes.DECIMAL,
+  },
+  other_browseUrlLoadingTime: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedDownloadLoadedLatency: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedDownloadLoadedJitter: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedDownloadDuration: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedDownloadAvgExclFileSlowstart: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedDownloadPacketLoss: {
+    type: DataTypes.DECIMAL,
+  },
+
+  other_speedUploadFilePeak: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedUploadAvgExclSlowstart: {
+    type: DataTypes.DECIMAL,
+  },
+
+  other_speedDownloadFilePeak: {
+    type: DataTypes.DECIMAL,
+  },
+  other_speedDownloadPeak: {
+    type: DataTypes.DECIMAL,
+  },
+
+  other_browserUrl: {
+    type: DataTypes.STRING,
+  },
+  other_speedDownloadAvgExclSlowstart: {
+    type: DataTypes.DECIMAL,
+  },
+  stream_quality_status: {
+    type: DataTypes.STRING,
+  },
+  speed_status: {
+    type: DataTypes.STRING,
+  },
+  browse_url_status: {
+    type: DataTypes.STRING,
   },
 });
 
