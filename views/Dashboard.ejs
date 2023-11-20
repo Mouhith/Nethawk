@@ -19,7 +19,18 @@
       integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
       crossorigin="anonymous"
     />
+ 
+     
 
+    <style>
+      iframe {
+          min-height: 100vh;
+          height: 100%;
+          width: 100%;
+          border: none;
+      }
+      
+  </style>
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -31,15 +42,20 @@
       integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
       crossorigin="anonymous"
     ></script>
-
+    <script src="https://unpkg.com/@superset-ui/embedded-sdk"></script>
     <script
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
       integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
       crossorigin="anonymous"
     ></script>
+
+    <!-- Intro js -->
+    <link rel="stylesheet" href="https://unpkg.com/intro.js@4.2.2/minified/introjs.min.css">
+    <script src="https://unpkg.com/intro.js@4.2.2/minified/intro.min.js"></script>
     <!-- bootstrap cdn -->
   </head>
-  <body onload="myFunction()" method="post" action="/dashboard">
+  <body  method="post" action="/dashboard">
+
     <div class="result-main-container" id="dashboard-id">
       <div class="left-container">
         <img
@@ -53,121 +69,43 @@
             <i class="fa fa-angle-down" aria-hidden="true"></i>
           </button>
           <div class="dropdown-content">
-<<<<<<< HEAD
-            <a href="#"
-=======
+
             <a href="/logout"
->>>>>>> 86333aab17eb4b46b95bbb0880e90c100c1ec593
               >Logout <i class="fa fa-sign-out ml-1" aria-hidden="true"></i
             ></a>
           </div>
         </div>
       </div>
       <div class="right-container">
-        <div class="div1" id="div11">
-          <div class="loader"></div>
-          <p class="loading-text">Your results are loading...</p>
-          <p id="paraId" class="para-style"></p>
-        </div>
-        <div class="car-div1" style="display: none" id="dashboardId">
-          <div
-            id="carouselExampleIndicators"
-            class="carousel slide"
-            data-ride="carousel"
-          >
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <div class="texttt d-flex justify-content-between">
-                  <h3>Enterprise 1</h3>
-                  <h3>Enterprise ISP: Airtel</h3>
-                </div>
+        <div id="dashboard-container"></div>
 
-                <img
-                  class="d-block w-100 image-style"
-                  src="/images/image.png"
-                  alt="First slide"
-                />
-              </div>
-              <div class="carousel-item">
-                <div class="texttt d-flex justify-content-between">
-                  <h3>Enterprise 1</h3>
-                  <h3>Enterprise ISP: Nuron Broadband</h3>
-                </div>
-
-                <img
-                  class="d-block w-100 image-style"
-                  src="/images/image.png"
-                  alt="Second slide"
-                />
-              </div>
-              <div class="carousel-item">
-                <div class="texttt d-flex justify-content-between">
-                  <h3 class="mt-2">Enterprise 1</h3>
-                  <h3 class="mt-2">Comparision Report</h3>
-                  <h3 class="mt-2">Test Date: 00/00/00</h3>
-                  <h3 class="mt-2">Start Time: 00:00:00</h3>
-                  <h3 class="mt-2">End Time: 00:00:00</h3>
-                  <button class="btn btn-success export-btn">
-                    Export raw data
-                  </button>
-                </div>
-
-                <img
-                  class="d-block w-100 image-style"
-                  style="height: 92vh"
-                  src="/images/image.png"
-                  alt="Third slide"
-                />
-              </div>
-            </div>
-            <a
-              class="carousel-control-prev"
-              href="#carouselExampleIndicators"
-              style="margin-top: 60px"
-              role="button"
-              data-slide="prev"
-            >
-              <span
-                class="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a
-              class="carousel-control-next"
-              href="#carouselExampleIndicators"
-              style="margin-top: 50px"
-              role="button"
-              data-slide="next"
-            >
-              <span
-                class="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
-        </div>
       </div>
     </div>
     <!-- js -->
+    
+
     <script>
-      var myfun;
-      var myfun2;
+      // Token for authentication
+      let token =` <%= token%>`;
 
-      function myFunction() {
-        myfun = setTimeout(showPage, 3000);
-        myfun2 = setTimeout(displayText, 2000);
-      }
-
-      function showPage() {
-        document.getElementById("div11").style.display = "none";
-        document.getElementById("dashboardId").style.display = "block";
-      }
-
-      function displayText() {
-        document.getElementById("paraId").textContent = "Almost There !!";
-      }
-    </script>
+      // Embed the Superset dashboard
+      supersetEmbeddedSdk.embedDashboard({
+          id: "6bf0ea4c-ec1a-4e23-b946-22f927ef8e6e",  // Given by the Superset embedding UI
+          supersetDomain: "http://localhost:8088", // Include the scheme (http) here
+          mountPoint: document.getElementById("dashboard-container"), // HTML element in which the iframe should render
+          fetchGuestToken: () => token,
+          dashboardUiConfig: {
+              hideTitle: true,
+              hideChartControls: true,
+              filters: {
+                  visible: false,
+                  expanded: false,
+              }
+          }
+      })
+      .then(res => console.log("Dashboard embedded successfully"))
+      .catch(error => console.error("Error embedding dashboard:", error));
+  </script>
+  <script src="/js/intro.js"></script>
   </body>
 </html>

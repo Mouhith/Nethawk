@@ -3,12 +3,12 @@ const Leads = require("../../models/leads");
 const crypto = require("../tools/crypto");
 const otp = require("../tools/otp");
 const sms = require("../tools/sms");
-
+const getToken = require("../tools/superSet");
 exports.login = (req, res, next) => {
   try {
-    // if (req.cookies["NU-NLIC"]) {
-    //   return res.status(201).redirect("/dashboard");
-    // }
+    if (req.cookies["NU-NLIC"]) {
+      return res.status(201).redirect("/dashboard");
+    }
 
     res.render("login", { message: "" });
   } catch (error) {
@@ -95,9 +95,10 @@ exports.otpVerification = async (req, res, next) => {
   }
 };
 
-exports.getDashboard = (req, res, next) => {
+exports.getDashboard = async (req, res, next) => {
   try {
-    res.status(200).render("dashboard");
+    const token = await getToken();
+    res.status(200).render("dashboard", { token: token });
   } catch (error) {
     next(error);
   }
