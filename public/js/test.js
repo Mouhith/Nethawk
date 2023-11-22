@@ -12,13 +12,13 @@ introJs()
         title: "Upload Jitter (in ms)",
         element: document.querySelector("#Upload_jitter"),
         intro:
-          "This Data parameter indicates avg time taken for a packet, sent from User side, to make a roundtrip. This parameter indicates responsiveness of the network </br></br>(A good network has low values of latency) ",
+          "This Data parmater indicates variation in roundtrip time of different packets sent from user side over network </br></br>(A good network has low value of jitter)",
       },
       {
-        title: "Upload Jitter (in ms)",
+        title: "Upload latency (in ms)",
         element: document.querySelector("#uplode_latency"),
         intro:
-          "This Data parmater indicates variation in roundtrip time of different packets sent from user side over network </br></br>(A good network has low value of jitter)",
+          "This Data parameter indicates avg time taken for a packet, sent from User side, to make a roundtrip. This parameter indicates responsiveness of the network </br></br>(A good network has low values of latency) ",
       },
       {
         title: "Download Jitter (in ms)",
