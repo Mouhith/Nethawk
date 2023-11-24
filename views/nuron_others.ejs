@@ -1,0 +1,31 @@
+
+<%- include('partials/header') -%>
+    <div class="right-container">
+      <div id="dashboard-container"></div>
+      </div>
+    </div>
+    <script>
+      // Token for authentication
+      let token =` <%= token%>`;
+
+      // Embed the Superset dashboard
+      supersetEmbeddedSdk.embedDashboard({
+          id: "6bf0ea4c-ec1a-4e23-b946-22f927ef8e6e",  
+          supersetDomain: "http://localhost:8088", 
+          mountPoint: document.getElementById("dashboard-container"), 
+          fetchGuestToken: () => token,
+          dashboardUiConfig: {
+              hideTitle: true,
+              hideChartControls: true,
+              filters: {
+                  visible: false,
+                  expanded: false,
+              }
+          }
+      })
+      .then(res => console.log("Dashboard embedded successfully"))
+      .catch(error => console.error("Error embedding dashboard:", error));
+  </script>
+
+  </body>
+</html>

@@ -41,7 +41,7 @@ app.use("/admin", require("./server/routes/admin_route"));
 //test
 
 app.use("/test", (req, res) => {
-  res.render("test");
+  res.render("boot");
 });
 
 app.use((err, req, res, next) => {

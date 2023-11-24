@@ -98,7 +98,7 @@ exports.otpVerification = async (req, res, next) => {
 exports.getDashboard = async (req, res, next) => {
   try {
     const token = await getToken();
-    res.status(200).render("dashboard", { token: token });
+    res.status(200).render("dashboard", { token: token, name: "Nuron" });
   } catch (error) {
     next(error);
   }
@@ -108,6 +108,26 @@ exports.logout = async (req, res, next) => {
   try {
     res.clearCookie("NU-NLIC");
     res.status(302).redirect("/");
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getDashboard_others = async (req, res, next) => {
+  try {
+    const token = await getToken();
+    res.status(200).render("others", { token: token, name: "Others" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getnuron_others = async (req, res, next) => {
+  try {
+    const token = await getToken();
+    res
+      .status(200)
+      .render("nuron_others", { token: token, name: "Nuron vs Other" });
   } catch (error) {
     next(error);
   }

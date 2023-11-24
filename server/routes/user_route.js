@@ -8,4 +8,8 @@ route.get("/logout", user_conroller.logout);
 route.post("/login", user_conroller.postLogin);
 route.post("/otp", userAuth, user_conroller.otpVerification);
 route.get("/dashboard", userAuth, user_conroller.getDashboard);
+route.get("/dashboard/others", userAuth, user_conroller.getDashboard_others);
+
+route.get("/dashboard/nuron-other", userAuth, user_conroller.getnuron_others);
+
 module.exports = route;
