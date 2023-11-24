@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+      iframe {
+          min-height: 100vh;
+          height: 100%;
+          width: 100%;
+          border: none;
+          margin-top: 3%;
+     
+      }
+</style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="https://unpkg.com/intro.js@4.2.2/minified/intro.min.js"></script>
+  <script src="https://unpkg.com/@superset-ui/embedded-sdk"></script>
+</head>
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/images/nuron-fevicon.png" alt="nuron" width="40" height="40"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav ms-auto ">
+                    <li class="nav-item">
+                        <a class="nav-link active pe-4" aria-current="page" href="/"> Home</a>
+                    </li>
+                    <li class="nav-item pe-4">
+                        <a class="nav-link " href="/adduser">Nuron</a>
+                    </li>
+                    <li class="nav-item pe-4">
+                        <a class="nav-link " href="/add_role">Others</a>
+                    </li>
+    
+                    <li class="nav-item pe-4">
+                        <a class="nav-link " href="/add_role">Nuron vs Others</a>
+                    </li>
+                    <li class="nav-item pe-4">
+                        <a class="nav-link " href="/add_role">Others</a>
+                    </li>
+                    <li class="nav-item pe-4">
+                        <a class="nav-link " href="/add_role">Others</a>
+                    </li>
+                    <li class="nav-item dropdown   ">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fa-4x"></i>
+                        </a>
+                        <ul class="dropdown-menu " style="right: 0;left:auto" aria-labelledby="navbarScrollingDropdown">
+                            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                            <li><button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                    data-bs-target="#changepassword">Change Password</button></li>
+    
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><button type="button" class=" dropdown-item active " data-bs-toggle="modal"
+                                    data-bs-target="#logout">
+                                    Logout
+                                </button></li>
+                        </ul>
+                    </li>
+    
+    
+                </ul>
+    
+            </div>
+        </div>
+    </nav>
+
+    <div id="dashboard-container"></div>
+    <script>
+        // Token for authentication
+        let token =`eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7Imxhc3RfbmFtZSI6InRlc3QiLCJ1c2VybmFtZSI6InRlc3QiLCJmaXJzdF9uYW1lIjoidGVzdCJ9LCJyZXNvdXJjZXMiOlt7InR5cGUiOiJkYXNoYm9hcmQiLCJpZCI6IjZiZjBlYTRjLWVjMWEtNGUyMy1iOTQ2LTIyZjkyN2VmOGU2ZSJ9XSwicmxzX3J1bGVzIjpbeyJjbGF1c2UiOiJzY2hlZHVsaW5nX25hbWU9J3Rlc3QxJyJ9XSwiaWF0IjoxNzAwNzIxMTE1LjA2Njk0MywiZXhwIjoxNzAwNzUxMTE1LjA2Njk0MywiYXVkIjoiaHR0cDovL3N1cGVyc2V0OjgwODgvIiwidHlwZSI6Imd1ZXN0In0.0LHJ5N9zkcR6G1JMtNz0oQHtY3cHl_ofm9zF8ddjOU0`;
+  
+        // Embed the Superset dashboard
+        supersetEmbeddedSdk.embedDashboard({
+            id: "6bf0ea4c-ec1a-4e23-b946-22f927ef8e6e",  
+            supersetDomain: "http://localhost:8088", 
+            mountPoint: document.getElementById("dashboard-container"), 
+            fetchGuestToken: () => token,
+            dashboardUiConfig: {
+                hideTitle: true,
+                hideChartControls: true,
+                filters: {
+                    visible: false,
+                    expanded: false,
+                }
+            }
+        })
+        .then(res => console.log("Dashboard embedded successfully"))
+        .catch(error => console.error("Error embedding dashboard:", error));
+    </script>
+</body>
+</html>

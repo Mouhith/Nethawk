@@ -1,0 +1,15 @@
+body {
+  box-sizing: border-box;
+  background-image: url("../images/bg.svg");
+  width: 100vw;
+  height: 100vh;
+}
+nav {
+  box-shadow: 1px 2px 10px black;
+}
+.navbar-collapse {
+  display: flex;
+  justify-content: space-between;
+}
+.dashboard-container {
+}
