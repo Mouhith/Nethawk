@@ -98,6 +98,9 @@ exports.otpVerification = async (req, res, next) => {
 exports.getDashboard = async (req, res, next) => {
   try {
     const token = await getToken();
+
+    const data = await crypto.decryption(req.cookie);
+    console.log(data);
     res.status(200).render("dashboard", { token: token, name: "Nuron" });
   } catch (error) {
     next(error);
