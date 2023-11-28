@@ -6,6 +6,7 @@ exports.userAuth = async (req, res, next) => {
       return res.status(200).redirect("/");
     }
 
+
     req.cookie = cookiee;
     next();
   } catch (error) {

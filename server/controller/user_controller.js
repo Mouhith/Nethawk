@@ -12,7 +12,7 @@ exports.login = (req, res, next) => {
 
     res.render("login", { message: "" });
   } catch (error) {
-    console.log(error);
+   
     next(error);
   }
 };
@@ -42,10 +42,11 @@ exports.postLogin = async (req, res, next) => {
       user: result.phone_num,
       user_id: result.lead_id,
       otp: otpdata,
+
     };
     const encryptedData = await crypto.encrypt(data);
 
-    res.cookie("NU-NLIC", encryptedData, { maxAge: 150000 });
+    res.cookie("NU-VAL", encryptedData, { maxAge: 150000 });
 
     // Send a success response
     await sms(otpdata, value.phone_num);
@@ -59,7 +60,12 @@ exports.postLogin = async (req, res, next) => {
 exports.otpVerification = async (req, res, next) => {
   try {
     const { otpr } = req.body;
-    const cookie = req.cookie;
+    const cookiee = req.cookies["NU-VAL"];
+    
+    if (!cookiee) {
+      return res.status(200).redirect("/");
+    }
+    const cookie = cookiee;
 
     if (!cookie) {
       return res.status(400).render("otp", {
@@ -68,7 +74,7 @@ exports.otpVerification = async (req, res, next) => {
     }
 
     const data = await crypto.decryption(cookie);
-
+    
     if (data.otp !== otpr) {
       return res.status(400).render("otp", { message: "Incorrect OTP" });
     }
@@ -85,6 +91,7 @@ exports.otpVerification = async (req, res, next) => {
     }
     const cookie_data = {
       user_id: result.phone_num,
+      S_id:result.organisationname
     };
     const encryptdata = await crypto.encrypt(cookie_data);
     res.clearCookie("NU-NLIC");
