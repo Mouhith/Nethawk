@@ -10,7 +10,7 @@
 
       // Embed the Superset dashboard
       supersetEmbeddedSdk.embedDashboard({
-          id: "6bf0ea4c-ec1a-4e23-b946-22f927ef8e6e",  
+          id: `<%= db_id%>`,  
           supersetDomain: "http://localhost:8088", 
           mountPoint: document.getElementById("dashboard-container"), 
           fetchGuestToken: () => token,

@@ -1,12 +1,12 @@
 const axios = require("axios");
 
-async function getToken() {
+async function getToken(s_id, dashboard_id) {
   try {
     // Step 1: Get the access token
     const loginData = {
-      username: "admin",
-      password: "admin",
-      provider: "db",
+      username: process.env.SUPER_SET_USERNAME,
+      password: process.env.SUPER_SET_PASSWORD,
+      provider: process.env.SUPER_SET_PROVIDER,
       refresh: true,
     };
 
@@ -23,19 +23,19 @@ async function getToken() {
     // Step 2: Get the guest token
     const userData = {
       user: {
-        username: "test",
-        first_name: "test",
-        last_name: "test",
+        username: process.env.SUPER_SET_GUEST_USERNAME,
+        first_name: process.env.SUPER_SET_GUEST_USER_FIRTS_NAME,
+        last_name: process.env.SUPER_SET_GUEST_USER_LAST_NAME,
       },
       resources: [
         {
           type: "dashboard",
-          id: "6bf0ea4c-ec1a-4e23-b946-22f927ef8e6e",
+          id: dashboard_id,
         },
       ],
       rls: [
         {
-          clause: "scheduling_name='test1'",
+          clause: `scheduling_name='${s_id}'`,
         },
       ],
     };

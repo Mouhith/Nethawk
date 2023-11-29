@@ -76,20 +76,22 @@
             class="nuron-logo"
           />
           <div class="links-container">
-            <a class="side-nav-link" onClick="window.location.reload()">
+            <a class="side-nav-link" href="/dashboard">
               Introduction</a
             >
             <hr />
-            <a href="/dashboard" class="side-nav-link"> Nuron</a>
+            <a href="/dashboard/nuron" class="side-nav-link"> Nuron</a>
             <hr />
             <a href="/dashboard/others" class="side-nav-link"> Others</a>
             <hr />
             <a href="/dashboard/nuron-other" class="side-nav-link"> Nuron vs Others</a>
             <hr />
+            <% if(linkURL===true){%>
             <a href="#" class="side-nav-link"> Link 1</a>
             <hr />
             <a href="#" class="side-nav-link"> Link 2</a>
             <hr />
+<%}%>
           </div>
         </div>
 

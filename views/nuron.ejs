@@ -1,4 +1,7 @@
 
+
+
+
 <%- include('partials/header') -%>
     <div class="right-container">
       <div id="dashboard-container"></div>
@@ -10,7 +13,7 @@
 
       // Embed the Superset dashboard
       supersetEmbeddedSdk.embedDashboard({
-          id: `<%= db_id%>`,  
+          id: `<%= db_id%>` , 
           supersetDomain: "http://localhost:8088", 
           mountPoint: document.getElementById("dashboard-container"), 
           fetchGuestToken: () => token,
