@@ -106,7 +106,10 @@ async function processTestData(obj, conversionFactor) {
     stream_quality_status: obj.STREAM_QUALITY_STATUS,
     speed_status: obj.SPEED_STATUS,
     browse_url_status: obj.BROWSE_URL_STATUS,
+    dates: obj.START_DATETIME_UTC.split(" ")[0],
   };
+
+  // result.dates = result.dates.split(" ")[0];
   if (result.isp === "One Eight Technologies Private IN") {
     if (obj.TEST_TYPE === "streaming" && obj.STREAM_STATUS === "OK") {
       result.streamPr = obj.STREAM_PR || null;

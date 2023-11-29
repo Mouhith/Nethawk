@@ -176,6 +176,9 @@ const Result = db.define("Result", {
   browse_url_status: {
     type: DataTypes.STRING,
   },
+  dates: {
+    type: DataTypes.DATEONLY,
+  },
 });
 
 module.exports = Result;

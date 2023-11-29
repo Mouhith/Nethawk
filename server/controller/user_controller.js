@@ -4,6 +4,7 @@ const crypto = require("../tools/crypto");
 const otp = require("../tools/otp");
 const sms = require("../tools/sms");
 const getToken = require("../tools/superSet");
+const Results = require("../../models/result");
 exports.login = (req, res, next) => {
   try {
     if (req.cookies["NU-NLIC"]) {
@@ -12,7 +13,6 @@ exports.login = (req, res, next) => {
 
     res.render("login", { message: "" });
   } catch (error) {
-   
     next(error);
   }
 };
@@ -42,7 +42,6 @@ exports.postLogin = async (req, res, next) => {
       user: result.phone_num,
       user_id: result.lead_id,
       otp: otpdata,
-
     };
     const encryptedData = await crypto.encrypt(data);
 
@@ -61,7 +60,7 @@ exports.otpVerification = async (req, res, next) => {
   try {
     const { otpr } = req.body;
     const cookiee = req.cookies["NU-VAL"];
-    
+
     if (!cookiee) {
       return res.status(200).redirect("/");
     }
@@ -74,7 +73,7 @@ exports.otpVerification = async (req, res, next) => {
     }
 
     const data = await crypto.decryption(cookie);
-    
+
     if (data.otp !== otpr) {
       return res.status(400).render("otp", { message: "Incorrect OTP" });
     }
@@ -91,10 +90,11 @@ exports.otpVerification = async (req, res, next) => {
     }
     const cookie_data = {
       user_id: result.phone_num,
-      S_id:result.organisationname
+      S_id: result.organisation_name,
     };
+
     const encryptdata = await crypto.encrypt(cookie_data);
-    res.clearCookie("NU-NLIC");
+    res.clearCookie("NU-VAL");
     res.cookie("NU-NLIC", encryptdata);
     res.status(200).redirect("/dashboard");
   } catch (error) {
@@ -104,11 +104,27 @@ exports.otpVerification = async (req, res, next) => {
 
 exports.getDashboard = async (req, res, next) => {
   try {
-    const token = await getToken();
-
+    const linkURL = false;
+    const dashboard_id = process.env.SUPER_SET_NURON_DASHBOARD_ID;
     const data = await crypto.decryption(req.cookie);
-    console.log(data);
-    res.status(200).render("dashboard", { token: token, name: "Nuron" });
+    const token = await getToken(data.S_id, linkURL, dashboard_id);
+    ///
+
+    const dat = await Results.findAll({
+      attributes: ["dates"],
+
+      where: {
+        scheduling_name: data.S_id,
+      },
+    });
+    const array = dat.map((result) => result.dataValues.dates);
+    const newset = new Set(array);
+    if (newset.size > 1) {
+      linkURL = true;
+    }
+    res
+      .status(200)
+      .render("dashboard", { token: token, linkURL, name: "Nuron" });
   } catch (error) {
     next(error);
   }
@@ -125,8 +141,32 @@ exports.logout = async (req, res, next) => {
 
 exports.getDashboard_others = async (req, res, next) => {
   try {
-    const token = await getToken();
-    res.status(200).render("others", { token: token, name: "Others" });
+    const linkURL = false;
+    const dashboard_id = process.env.SUPER_SET_NURON_DASHBOARD_ID;
+    const data = await crypto.decryption(req.cookie);
+    const token = await getToken(data.S_id, linkURL, dashboard_id);
+    ///
+
+    const dat = await Results.findAll({
+      attributes: ["dates"],
+
+      where: {
+        scheduling_name: data.S_id,
+      },
+    });
+    const array = dat.map((result) => result.dataValues.dates);
+    const newset = new Set(array);
+    if (newset.size > 1) {
+      linkURL = true;
+    }
+    ///
+
+    res.status(200).render("others", {
+      token: token,
+      db_id: dashboard_id,
+      linkURL,
+      name: "Others",
+    });
   } catch (error) {
     next(error);
   }
@@ -134,10 +174,65 @@ exports.getDashboard_others = async (req, res, next) => {
 
 exports.getnuron_others = async (req, res, next) => {
   try {
-    const token = await getToken();
-    res
-      .status(200)
-      .render("nuron_others", { token: token, name: "Nuron vs Other" });
+    const linkURL = false;
+    const dashboard_id = process.env.SUPER_SET_NURON_DASHBOARD_ID;
+    const data = await crypto.decryption(req.cookie);
+    const token = await getToken(data.S_id, dashboard_id);
+    ///
+
+    const dat = await Results.findAll({
+      attributes: ["dates"],
+
+      where: {
+        scheduling_name: data.S_id,
+      },
+    });
+    const array = dat.map((result) => result.dataValues.dates);
+    const newset = new Set(array);
+    if (newset.size > 1) {
+      linkURL = true;
+    }
+    ///
+
+    res.status(200).render("nuron_others", {
+      token: token,
+      db_id: dashboard_id,
+      linkURL,
+      name: "Nuron vs Other",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getDashboard_nuron = async (req, res, next) => {
+  try {
+    const linkURL = false;
+    const dashboard_id = process.env.SUPER_SET_NURON_DASHBOARD_ID;
+    const data = await crypto.decryption(req.cookie);
+    const token = await getToken(data.S_id, dashboard_id);
+    ///
+
+    const dat = await Results.findAll({
+      attributes: ["dates"],
+
+      where: {
+        scheduling_name: data.S_id,
+      },
+    });
+    const array = dat.map((result) => result.dataValues.dates);
+    const newset = new Set(array);
+    if (newset.size > 1) {
+      linkURL = true;
+    }
+    ///
+
+    res.status(200).render("nuron", {
+      token: token,
+      db_id: dashboard_id,
+      linkURL,
+      name: "Nuron",
+    });
   } catch (error) {
     next(error);
   }

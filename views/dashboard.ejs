@@ -1,112 +1,370 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nethawk - Result dashboard</title>
-    <link rel="stylesheet" href="/css/dashboard.css" />
-    <!-- favicon -->
-    <link rel="icon" type="image/x-icon" href="/images/nuron-fevicon.png" />
-    <!-- font awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <!-- bootstrap cdn -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="anonymous"
-    />
- 
-     
+<%- include('partials/header') -%>
+      <div class="right-container">
+        <div class="main-container">
+          <div class="pannels">
+            <img
+              src="/images/nethawk_img/uplode_jitter.png"
+              alt="Upload_jitter"
+              id="Upload_jitter"
+            />
+            <div class="pannels-div Upload-jitter">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Upload Jitter (in ms)
+              </h3>
 
-    <style>
-      iframe {
-          min-height: 100vh;
-          height: 100%;
-          width: 100%;
-          border: none;
-          
-      }
-      
-  </style>
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parmater indicates variation in roundtrip time of
+                different packets sent from user side over network.
+                <br />
+                <br />
+                (A good network has low value of jitter)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/uplode_latency.png"
+              alt="uplode_latency"
+              id="uplode_latency"
+            />
+            <div class="pannels-div uplode-latency">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Upload Latency (in ms)
+              </h3>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://unpkg.com/@superset-ui/embedded-sdk"></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-      crossorigin="anonymous"
-    ></script>
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates avg time taken for a packet, sent
+                from User side, to make a roundtrip. This parameter indicates
+                responsiveness of the network <br /><br />(A good network has
+                low values of latency)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/download_itter.png"
+              alt="download_itter"
+              id="download_itter"
+            />
+            <div class="pannels-div download-itter">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Download Jitter (in ms)
+              </h3>
 
-    <!-- Intro js -->
-    <link rel="stylesheet" href="https://unpkg.com/intro.js@4.2.2/minified/introjs.min.css">
-    <script src="https://unpkg.com/intro.js@4.2.2/minified/intro.min.js"></script>
-    <!-- bootstrap cdn -->
-  </head>
-  <body  method="post" action="/dashboard">
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parmater indicates variation in roundtrip time of
+                different packets sent from server side over network
+                <br />
+                <br />
+                (A good network has low value of jitter)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/download_latency.png"
+              alt="download_latency"
+              id="download_latency"
+            />
+            <div class="pannels-div d-latency">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Download Latency (in ms)
+              </h3>
 
-    <div class="result-main-container" id="dashboard-id">
-      <div class="left-container">
-        <img
-          src="/images/nuron white logo.png"
-          alt="nuron-logo"
-          class="nuron-logo-styling"
-        />
-        <div class="dropdown1">
-          <button class="dropbtn">
-            Nuron_Guest
-            <i class="fa fa-angle-down" aria-hidden="true"></i>
-          </button>
-          <div class="dropdown-content">
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates avg time taken for a packet, sent
+                from server side, to make a roundtrip. This parameter indicates
+                responsiveness of the network <br /><br />(A good network has
+                low values of latency)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/packet_loss.png"
+              alt="packet_loss"
+              id="packet_loss"
+            />
+            <div class="pannels-div packet-loss">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Packet Loss %
+              </h3>
 
-            <a href="/logout"
-              >Logout <i class="fa fa-sign-out ml-1" aria-hidden="true"></i
-            ></a>
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates the ratio of the total number of
+                TCP packets retransmitted and the total number of TCP packets
+                sent. This parameter indicates reliability of the network<br /><br />
+                (A good network has low value of packet loss)
+              </p>
+            </div>
+          </div>
+          <div class="download">
+            <img
+              src="/images/nethawk_img/download_80.png"
+              alt="download_80"
+              id="download_80"
+            />
+            <div class="downloads-div download-80">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Time to Download 80 Mb of file (in sec)
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates avg time taken to download a 10mb
+                of binary text (.dat) file while running Network test at
+                different time intervals<br /><br />
+                ( A good network has low values of this parameter)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/Avg_download_speed.png"
+              alt="Avg_download_speed"
+              id="Avg_download_speed"
+            />
+            <div class="downloads-div Avg-download-speed">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Average Download Speed (in Mb/Sec)
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates Average Download (Amount of Data
+                recevied in 1 sec) Speeds achieved while running Network test at
+                different time intervals <br /><br />( A good network has high
+                average upload Speeds)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/peak_download_speed.png"
+              alt="peak_download_speed"
+              id="peak_download_speed"
+            />
+            <div class="downloads-div peak-download-speed">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Peak Download Speed (in Mb/sec)
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates Peak Download (Amount of Data
+                received in 1 sec) Speeds achieved while running Network test at
+                different time intervals <br /><br />( A good network has high
+                and consistent peak Download Speeds)
+              </p>
+            </div>
+          </div>
+
+          <div class="upload">
+            <img
+              src="/images/nethawk_img/upload_80.png"
+              alt="upload_80.png"
+              id="upload_80"
+            />
+            <div class="uploads-div upload-80">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Time to Upload 80 Mb of file (in Sec)
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates avg time taken to upload a 10mb of
+                binary text (.dat) file while running Network test at different
+                time intervals <br /><br />( A good network has low values of
+                this parameter)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/avg_upload.png"
+              alt="avg_upload"
+              id="avg_upload"
+            />
+            <div class="uploads-div avg-upload">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Average Upload Speed (in Mb/sec)
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates Average Upload (Amount of Data
+                Sent in 1 sec) Speeds achieved while running Network test at
+                different time intervals <br /><br />( A good network has high
+                average upload Speeds)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/peak_upload.png"
+              alt="peak_upload"
+              id="peak_upload"
+            />
+            <div class="uploads-div peak-upload">
+              <div class="pointerr"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Peak Upload Speed (in Mb/sec)
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates Peak Upload (Amount of Data Sent
+                in 1 sec) Speeds achieved while running Network test at
+                different time intervals <br /><br />( A good network has high
+                and consistent peak upload Speeds)
+              </p>
+            </div>
+          </div>
+          <div class="browser">
+            <img
+              src="/images/nethawk_img/stream_quality.png"
+              alt="stream_quality"
+              id="stream_quality"
+            />
+            <div class="browser-div stream-quality">
+              <div class="pointerr1"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Stream Quality Score
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates Video Streaming performance by
+                measuring Ratio of Actual Video Duration and Video Playtime. If
+                value of this ratio tends towards 1, paramtere will indiacate
+                100 Quality Score<br /><br />( A good network has high Stream
+                Quality Score)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/browser.png"
+              alt="browsers"
+              id="browsers"
+            />
+            <div class="browser-div browserss">
+              <div class="pointerr1"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Avg Loading Time for Websites (in sec)
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates time (in sec) taken by network to
+                load 5 most commonly browsed Websites<br /><br />( A good
+                network has low average loading times for Websites)
+              </p>
+            </div>
+            <img
+              src="/images/nethawk_img/loding_time.png"
+              alt="loding_time"
+              id="loding_time"
+            />
+            <div class="browser-div loding-time">
+              <div class="pointerr1"></div>
+              <h3
+                style="
+                  text-align: center;
+                  margin-top: 15px;
+                  margin-bottom: 20px;
+                  color: #e4118c;
+                "
+              >
+                Loading Time of Stream (in Sec)
+              </h3>
+
+              <p style="text-align: center; line-height: 20px; font-size: 15px">
+                This Data parameter indicates time (in ms) taken by network to
+                Start a video Stream as soon as user clicks on Play Button
+                <br /><br />( A good network has low loading time of Stream)
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="right-container">
-        <div id="dashboard-container"></div>
-
-      </div>
     </div>
     <!-- js -->
-    
-
-    <script>
-      // Token for authentication
-      let token =` <%= token%>`;
-
-      // Embed the Superset dashboard
-      supersetEmbeddedSdk.embedDashboard({
-          id: "6bf0ea4c-ec1a-4e23-b946-22f927ef8e6e",  
-          supersetDomain: "http://localhost:8088", 
-          mountPoint: document.getElementById("dashboard-container"), 
-          fetchGuestToken: () => token,
-          dashboardUiConfig: {
-              hideTitle: true,
-              hideChartControls: true,
-              filters: {
-                  visible: false,
-                  expanded: false,
-              }
-          }
-      })
-      .then(res => console.log("Dashboard embedded successfully"))
-      .catch(error => console.error("Error embedding dashboard:", error));
-  </script>
-
+    <script src="/js/test.js"></script>
   </body>
 </html>
