@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Area Chart Example</title>
+  <!-- Include Google Charts library -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+  
+</head>
+
+<body>
+ 
+  <!-- Dropdown for selecting date -->
+  <label for="dateDropdown">Select Date: </label>
+  <select id="dateDropdown" onchange="updateChart()" style="width: 22%;" class="js-example-basic-multiple" name="dates[]" multiple="multiple">
+    <% data.forEach(date => { %>
+    <option value="<%- Object.keys(date)[0] %>"><%- Object.keys(date)[0] %></option>
+    <% }); %>
+  </select>
+
+  <!-- Chart container -->
+  <div id="chart_div" style="width: 50%; height: 400px;"></div>
+  <div id="avg" style="width: 50%; height: 400px;"></div>
+  <div id="packetloss" style="width: 50%; height: 400px;"></div>
+  <div id="up80" style="width: 50%; height: 400px;"></div>
+    <div id="avgupload" style="width: 50%; height: 400px;"></div>
+    <div id="peakupload" style="width: 50%; height: 400px;"></div>
+    <div id="stream" style="width: 50%; height: 400px;"></div>
+        <div id="loadtime" style="width: 50%; height: 400px;"></div>
+        <div id="bw" style="width: 50%; height: 400px;"></div>
+  <h4 id="uj"></h4>
+  <h4 id="ul"></h4>
+  <h4 id="dj"></h4>
+  <h4 id="dl"></h4>
+  <h4 id="dp"></h4>
+  <script>
+    var speed=`<%-JSON.stringify(speed)%>`;
+    var data=`<%-JSON.stringify(data)%>`
+    var speedDownloadAvgExclFileSlowstart=`<%-JSON.stringify(speedDownloadAvgExclFileSlowstart)%>`;
+    var chartspeedDownloadPacketLoss=`<%-JSON.stringify(chartspeedDownloadPacketLoss)%>`;
+    var speedUploadDuration=`<%-JSON.stringify(speedUploadDuration)%>`;
+    var speedUploadAvgExclFileSlowstart=`<%-JSON.stringify(speedUploadAvgExclFileSlowstart)%>`;
+    var speedUploadFilePeak=`<%-JSON.stringify(speedUploadFilePeak)%>`;
+    var streamPr=`<%-JSON.stringify(streamPr)%>`;
+var streamQualityPreloadingTime=`<%-JSON.stringify(streamQualityPreloadingTime)%>`;
+
+var browserurl=`<%-JSON.stringify(browserurl)%>`
+  </script>
+  <script src="/js/chart.js" ></script>
+</body>
+
+</html>
