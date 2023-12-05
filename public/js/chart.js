@@ -109,11 +109,20 @@ function updateChart() {
   const dp = document.getElementById("dp");
 
   if (selectedDates.length === 1) {
-    updateElementText(uj, speedUploadLoadedJitter[selectedDates[0]]);
-    updateElementText(ul, speedUploadLoadedLatency[selectedDates[0]]);
-    updateElementText(dj, speedDownloadLoadedJitter[selectedDates[0]]);
-    updateElementText(dl, speedDownloadLoadedLatency[selectedDates[0]]);
-    updateElementText(dp, speedDownloadPacketLoss[selectedDates[0]]);
+    updateElementText(uj, speedUploadLoadedJitter[selectedDates[0]].toFixed(2));
+    updateElementText(
+      ul,
+      speedUploadLoadedLatency[selectedDates[0]].toFixed(2)
+    );
+    updateElementText(
+      dj,
+      speedDownloadLoadedJitter[selectedDates[0]].toFixed(2)
+    );
+    updateElementText(
+      dl,
+      speedDownloadLoadedLatency[selectedDates[0]].toFixed(2)
+    );
+    updateElementText(dp, speedDownloadPacketLoss[selectedDates[0]].toFixed(2));
   } else {
     getSpeeddata(speedUploadLoadedJitter);
     // Add other speed data types as needed
@@ -183,9 +192,12 @@ function getChartOptions(title) {
   return {
     title: title,
     titleTextStyle: {
-      color: "blue",
-      fontSize: 18,
+      color: "#000",
+      fontSize: 16,
+      bottom: 30,
     },
+    colors: ["#e4118c", "#004411"],
+
     curveType: "function",
     hAxis: {
       format: "HH:mm",
@@ -193,29 +205,32 @@ function getChartOptions(title) {
         count: 0,
       },
     },
+    width: 390,
+    height: 200,
+
     legend: {
       position: "none",
     },
+    backgroundColor: { fill: "#fff" },
+
     vAxis: {
       minValue: 0,
       gridlines: {
         count: 0,
       },
       title: "Time in (ms)",
-      titleTextStyle: {
-        color: "black",
-      },
     },
+
     animation: {
       startup: true,
       duration: 1000,
       easing: "inAndOut",
     },
-    series: {
-      0: {
-        color: "red",
-      },
-    },
+    // series: {
+    //   0: {
+    //     color: "red",
+    //   },
+    // },
   };
 }
 
