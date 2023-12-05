@@ -85,7 +85,7 @@ async function pidrawGraph(selectedDate, data, elementId, title) {
   }
 }
 function pidrawAreaChart(elementId, data, options) {
-  var chart = new google.visualization.PieChart(
+  var chart = new google.visualization.ColumnChart(
     document.getElementById(elementId)
   );
   chart.draw(data, options);
@@ -125,7 +125,6 @@ function updateChart() {
     selectedDates.forEach((date) => {
       total += type[date] || 0;
     });
-    console.log(total);
   }
 
   drawChart(selectedDates);
@@ -133,7 +132,7 @@ function updateChart() {
 
 $(document).ready(function () {
   $(".js-example-basic-multiple").select2({
-    maximumSelectionLength: 2,
+    //maximumSelectionLength: 2,
   });
 });
 
@@ -156,26 +155,29 @@ async function createGraph(selectedDate, chartData, title) {
     var options = getChartOptions(title);
     return { data, options };
   } else if (selectedDate.length > 1) {
-    var data = new google.visualization.DataTable();
-    data.addColumn("string", "Time");
-    data.addColumn("number", "Value 1");
-    data.addColumn("number", "Value 2");
+    var dataTable = new google.visualization.DataTable();
+    dataTable.addColumn("string", "Time");
 
-    let va = [];
+    selectedDate.forEach((date) => {
+      dataTable.addColumn("number", date);
+    });
+
+    var va = [];
+
     selectedDate.forEach((dat) => {
       JSON.parse(chartData).forEach((ent) => {
-        const date = Object.keys(ent)[0];
-        if (date === dat) {
-          va.push(ent[date]);
+        const currentDate = Object.keys(ent)[0];
+        if (currentDate === dat) {
+          va.push(ent[currentDate]);
         }
       });
     });
 
-    var combinedData = combineData(...va);
-    data.addRows(combinedData);
+    var combinedData = combineData(selectedDate, ...va);
+    dataTable.addRows(combinedData);
 
     var options = getChartOptions(title);
-    return { data, options };
+    return { data: dataTable, options };
   }
 }
 
@@ -215,37 +217,57 @@ function getChartOptions(title) {
       0: {
         color: "red",
       },
+      1: {
+        color: "blue",
+      },
     },
   };
 }
 
-function combineData(data1, data2) {
+function combineData(date, ...dataArrays) {
   var combinedData = [];
-  var mergedTimes = new Set([
-    ...data1.map((entry) => entry[0]),
-    ...data2.map((entry) => entry[0]),
-  ]);
+  var mergedTimes = new Set();
 
+  // Iterate through all passed arguments (data arrays)
+  for (var i = 0; i < dataArrays.length; i++) {
+    var data = dataArrays[i];
+
+    if (data) {
+      // Add unique times to the mergedTimes set
+      mergedTimes = new Set([...mergedTimes, ...data.map((entry) => entry[0])]);
+    }
+  }
+  console.log(mergedTimes);
+  // Create combinedData array using mergedTimes
   for (let time of mergedTimes) {
-    var value1 = data1.find((entry) => entry[0] === time);
-    var value2 = data2.find((entry) => entry[0] === time);
+    var values = [];
 
-    combinedData.push([
-      time,
-      value1 ? value1[1] : null,
-      value2 ? value2[1] : null,
-    ]);
+    // Iterate through all passed arguments (data arrays) and get the value for the current time
+    for (var i = 0; i < dataArrays.length; i++) {
+      var data = dataArrays[i];
+      var value = data ? data.find((entry) => entry[0] === time) : null;
+      values.push(value ? value[1] : null);
+    }
+
+    combinedData.push([time, ...values]);
+  }
+
+  // If date array has a length greater than 1, fill in null values
+  if (date.length > 1) {
+    combinedData.forEach((entry) => {
+      while (entry.length < date.length + 1) {
+        entry.push(null);
+      }
+    });
   }
 
   return combinedData;
 }
-
 function updateElementText(element, text) {
   if (element) {
     element.textContent = text || "NuN";
   }
 }
-
 ////////////////////////////
 
 async function piechart(selectedDate, chartData, title) {
@@ -258,12 +280,46 @@ async function piechart(selectedDate, chartData, title) {
     var date = Object.keys(entry)[0];
     if (date === selectedDate[0]) {
       entry[date].forEach(([time, value]) => {
-        console.log([[time, value]]);
-        data.addRow([time, value]);
+        data.addRow([time, 29]);
       });
     }
   });
 
-  var options = getChartOptions(title);
+  data.addColumn({ type: "string", role: "style" });
+
+  // Define colors array based on the URLs
+  var colors = [
+    "#FF5733",
+    "#33FF57",
+    "#5733FF",
+    "#FFFF33",
+    "#33FFFF",
+    "#FF33FF",
+  ];
+
+  // Add style information to each row
+  for (var i = 0; i < data.getNumberOfRows(); i++) {
+    data.setValue(i, 2, colors[i % colors.length]);
+  }
+  var colors = [
+    "#FF5733",
+    "#33FF57",
+    "#5733FF",
+    "#FFFF33",
+    "#33FFFF",
+    "#FF33FF",
+  ];
+  const options = {
+    title: "Avg Loading Time for websites (in ms)",
+    pieHole: 0.5,
+    pieSliceTextStyle: {
+      color: "black",
+    },
+    is3D: false,
+    legend: {
+      title: "URLs",
+    },
+  };
+
   return { data, options };
 }
