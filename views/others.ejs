@@ -22,14 +22,14 @@
         </svg>
         Filter
       </p>
-      <div class="date-dropdown">
+      <div class="date-dropdown" style="margin-bottom: 20px;">
         <!-- <label for="dateDropdown" style="opacity: 1">Select Date: </label> -->
         <select
           id="dateDropdown"
           onchange="updateChart()"
           style="width: 100%"
           class="js-example-basic-multiple"
-          name="dates[]"
+          name="dates[]" 
           multiple="multiple"
         >
           <% data.forEach(date => { %>

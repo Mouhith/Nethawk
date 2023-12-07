@@ -83,31 +83,31 @@ async function drawChart(selectedDate) {
       selectedDate,
       array(speedUploadLoadedJitter),
       "uj",
-      "speedUploadLoadedJitter"
+      "Upload Jitter (in ms)"
     );
     await barCgart(
       selectedDate,
       array(speedUploadLoadedLatency),
       "ul",
-      "speedUploadLoadedLatency"
+      "Upload Latency (in ms)"
     );
     await barCgart(
       selectedDate,
       array(speedDownloadLoadedLatency),
       "dl",
-      "speedDownloadLoadedLatency"
+      "Download Latency (in ms)"
     );
     await barCgart(
       selectedDate,
       array(speedDownloadLoadedJitter),
       "dj",
-      "speedDownloadLoadedJitter"
+      "Download Jitter (in ms)"
     );
     await barCgart(
       selectedDate,
       array(speedDownloadPacketLoss),
       "dp",
-      "speedDownloadPacketLoss"
+      "Packet Loss %"
     );
   }
 }
@@ -222,20 +222,23 @@ function updateChart() {
   } else {
     cardFilter = true;
     cardsContainer.innerHTML = `
-    <div class="chart-div" id="chart1">
-    <div id="uj"></div>
-  </div>
-  <div class="chart-div" id="chart1">
-  <div id="ul"></div>
-</div>
-<div class="chart-div" id="chart1">
-<div id="dj"></div>
-</div>
-<div class="chart-div" id="chart1">
-<div id="dl"></div>
-</div>  <div class="chart-div" id="chart1">
-<div id="dp"></div>
-</div>`;
+    <div class="div22">
+    <div class="chart-divv" id="chart11">
+       <div id="uj"></div>
+    </div>
+    <div class="chart-divv" id="chart12">
+       <div id="ul"></div>
+    </div>
+    <div class="chart-divv" id="chart13">
+       <div id="dj"></div>
+    </div>
+    <div class="chart-divv" id="chart14">
+       <div id="dl"></div>
+    </div>  
+    <div class="chart-divv" id="chart15">
+       <div id="dp"></div>
+    </div>
+    </div>`;
     // Add other speed data types as needed
   }
 
@@ -436,6 +439,10 @@ async function piechart(selectedDate, chartData, title) {
 
     legend: {
       title: "URLs",
+    },
+    titleTextStyle: {
+      color: "#000",
+      fontSize: 16,
     },
   };
 
