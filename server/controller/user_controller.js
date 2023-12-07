@@ -189,12 +189,34 @@ exports.getnuron_others = async (req, res, next) => {
       otherISPchartData(result),
     ]);
 
-    // res.status(200).render("nuron_others", {
-    //   token: token,
-    //   db_id: dashboard_id,
-    //   linkURL,
-    //   name: "Nuron vs Other",
-    // });
+    res.status(200).render("nuron_others", {
+      data: nuron.data,
+      speed: nuron.speed,
+      speedDownloadAvgExclFileSlowstart:
+        nuron.speedDownloadAvgExclFileSlowstart,
+      chartspeedDownloadPacketLoss: nuron.chartspeedDownloadPacketLoss,
+      speedUploadDuration: nuron.speedUploadDuration,
+      speedUploadAvgExclFileSlowstart: nuron.speedUploadAvgExclFileSlowstart,
+      speedUploadFilePeak: nuron.speedUploadFilePeak,
+      browserurl: nuron.browserurl,
+      streamPr: nuron.streamPr,
+      streamQualityPreloadingTime: nuron.streamQualityPreloadingTime,
+      other_data: otherisp.data,
+      other_speed: otherisp.speed,
+      other_speedDownloadAvgExclFileSlowstart:
+        otherisp.speedDownloadAvgExclFileSlowstart,
+      other_chartspeedDownloadPacketLoss: otherisp.chartspeedDownloadPacketLoss,
+      other_speedUploadDuration: otherisp.speedUploadDuration,
+      other_speedUploadAvgExclFileSlowstart:
+        otherisp.speedUploadAvgExclFileSlowstart,
+      other_speedUploadFilePeak: otherisp.speedUploadFilePeak,
+      other_streamPr: otherisp.streamPr,
+      other_streamQualityPreloadingTime: otherisp.streamQualityPreloadingTime,
+      other_browserurl: otherisp.browserurl,
+      nuron: true,
+      other: false,
+      isp: nuron.filteredISP[nuron.filteredISP.length - 1],
+    });
   } catch (error) {
     next(error);
   }
@@ -233,7 +255,6 @@ exports.getDashboard_nuron = async (req, res, next) => {
       nuron: true,
       other: false,
       isp: filteredISP[filteredISP.length - 1],
-      cardFilter: false,
     });
   } catch (error) {
     next(error);

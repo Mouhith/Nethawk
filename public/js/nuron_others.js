@@ -1,6 +1,15 @@
 // Initialize chartData directly from the server
-var chartData = data;
+const array = (data) => {
+  const array = Object.entries(data).map(([date, value]) => ({
+    [date]: [[date, value]],
+  }));
 
+  return JSON.stringify(array);
+};
+
+var chartData = data;
+var other_chartData = other_data;
+var cardFilter = false;
 var speed = JSON.parse(speed);
 
 const speedUploadLoadedJitter = speed.speedUploadLoadedJitter;
@@ -9,6 +18,13 @@ const speedDownloadLoadedLatency = speed.speedDownloadLoadedLatency;
 const speedDownloadLoadedJitter = speed.speedDownloadLoadedJitter;
 const speedDownloadPacketLoss = speed.speedDownloadPacketLoss;
 
+var other_speed = JSON.parse(other_speed);
+
+const other_speedUploadLoadedJitter = other_speed.speedUploadLoadedJitter;
+const other_speedUploadLoadedLatency = other_speed.speedUploadLoadedLatency;
+const other_speedDownloadLoadedLatency = other_speed.speedDownloadLoadedLatency;
+const other_speedDownloadLoadedJitter = other_speed.speedDownloadLoadedJitter;
+const other_speedDownloadPacketLoss = other_speed.speedDownloadPacketLoss;
 google.charts.load("current", {
   packages: ["corechart"],
 });
@@ -16,70 +32,110 @@ google.charts.load("current", {
 google.charts.setOnLoadCallback(() => {
   const parsdate = JSON.parse(chartData);
   const lastValue = Object.keys(parsdate[parsdate.length - 1])[0];
-  $("#dateDropdown").val([lastValue]).trigger("change");
+  const other_parsdate = JSON.parse(other_chartData);
+  const other_lastValue = Object.keys(
+    other_parsdate[other_parsdate.length - 1]
+  )[0];
+
+  $("#nuron").val([lastValue]).trigger("change");
+  $("#other").val([other_lastValue]).trigger("change");
 });
 
-async function drawChart(selectedDate) {
+async function drawChart(selector1, selector2) {
   await drawGraph(
-    selectedDate,
+    selector1,
+    selector2,
     chartData,
+    other_chartData,
     "chart_div",
     "Time to Download 80 Mb of File"
   );
   await drawGraph(
-    selectedDate,
+    selector1,
+    selector2,
     speedDownloadAvgExclFileSlowstart,
+    other_speedDownloadAvgExclFileSlowstart,
     "avg",
     "Average Download speed (in Mb/s)"
   );
   await drawGraph(
-    selectedDate,
+    selector1,
+    selector2,
     chartspeedDownloadPacketLoss,
+    other_chartspeedDownloadPacketLoss,
     "packetloss",
     "Peak Download Speed (in Mb/s)"
   );
   // upload
   await drawGraph(
-    selectedDate,
+    selector1,
+    selector2,
     speedUploadDuration,
+    other_speedUploadDuration,
     "up80",
     "Time to Upload 80 Mb of File"
   );
   await drawGraph(
-    selectedDate,
+    selector1,
+    selector2,
     speedUploadAvgExclFileSlowstart,
+    other_speedUploadAvgExclFileSlowstart,
     "avgupload",
     "Average Upload speed (in Mb/s)"
   );
   await drawGraph(
-    selectedDate,
+    selector1,
+    selector2,
     speedUploadFilePeak,
+    other_speedUploadFilePeak,
     "peakupload",
     "Peak Upload Speed (in Mb/s)"
   );
 
   //Streaming
 
-  await drawGraph(selectedDate, streamPr, "stream", "Stream Quality Score");
   await drawGraph(
-    selectedDate,
+    selector1,
+    selector2,
+    streamPr,
+    other_streamPr,
+    "stream",
+    "Stream Quality Score"
+  );
+  await drawGraph(
+    selector1,
+    selector2,
     streamQualityPreloadingTime,
+    other_streamQualityPreloadingTime,
     "loadtime",
     "Loading Time of Stream"
   );
-  await pidrawGraph(selectedDate, browserurl, "bw", "Loading Time of Stream");
+  await pidrawGraph(
+    selector1,
+    browserurl,
+
+    "bw",
+    "Loading Time of Stream"
+  );
+  await pidrawGraph(
+    selector2,
+
+    other_browserurl,
+    "obw",
+    "Loading Time of Stream"
+  );
 }
 
-async function drawGraph(selectedDate, data, elementId, title) {
-  const value = await createGraph(selectedDate, data, title);
+async function drawGraph(selector1, selector2, data1, data2, elementId, title) {
+  const value = await createGraph(selector1, selector2, data1, data2, title);
   if (value) {
     drawAreaChart(elementId, value.data, value.options);
   }
 }
 
 ///pi
-async function pidrawGraph(selectedDate, data, elementId, title) {
-  const value = await piechart(selectedDate, data, title);
+async function pidrawGraph(selectedDate, data1, elementId, title) {
+  const value = await piechart(selectedDate, data1, title);
   if (value) {
     pidrawAreaChart(elementId, value.data, value.options);
   }
@@ -90,7 +146,19 @@ function pidrawAreaChart(elementId, data, options) {
   );
   chart.draw(data, options);
 }
-
+/////bar chart
+async function barCgart(selectedDate, data, elementId, title) {
+  const value = await bargraph(selectedDate, data, title);
+  if (value) {
+    barcagrtcreation(elementId, value.data, value.options);
+  }
+}
+function barcagrtcreation(elementId, data, options) {
+  var chart = new google.visualization.ColumnChart(
+    document.getElementById(elementId)
+  );
+  chart.draw(data, options);
+}
 ///
 function drawAreaChart(elementId, data, options) {
   var chart = new google.visualization.AreaChart(
@@ -100,121 +168,115 @@ function drawAreaChart(elementId, data, options) {
 }
 
 function updateChart() {
-  var selectedDates = $("#dateDropdown").val();
+  var selector1 = $("#nuron").val();
+  var selector2 = $("#other").val();
 
   const uj = document.getElementById("uj");
   const ul = document.getElementById("ul");
   const dj = document.getElementById("dj");
   const dl = document.getElementById("dl");
   const dp = document.getElementById("dp");
+  const ouj = document.getElementById("ouj");
+  const oul = document.getElementById("oul");
+  const odj = document.getElementById("odj");
+  const odl = document.getElementById("odl");
+  const odp = document.getElementById("odp");
+  updateElementText(
+    ouj,
+    other_speedUploadLoadedJitter[selector2]
+      ? other_speedUploadLoadedJitter[selector2].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    oul,
+    other_speedUploadLoadedLatency[selector2]
+      ? other_speedUploadLoadedLatency[selector2].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    odj,
+    other_speedDownloadLoadedJitter[selector2]
+      ? other_speedDownloadLoadedJitter[selector2].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    odl,
+    other_speedDownloadLoadedLatency[selector2]
+      ? other_speedDownloadLoadedLatency[selector2].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    odp,
+    other_speedDownloadPacketLoss[selector2]
+      ? other_speedDownloadPacketLoss[selector2].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    uj,
+    speedUploadLoadedJitter[selector1]
+      ? speedUploadLoadedJitter[selector1].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    ul,
+    speedUploadLoadedLatency[selector1]
+      ? speedUploadLoadedLatency[selector1].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    dj,
+    speedDownloadLoadedJitter[selector1]
+      ? speedDownloadLoadedJitter[selector1].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    dl,
+    speedDownloadLoadedLatency[selector1]
+      ? speedDownloadLoadedLatency[selector1].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    dp,
+    speedDownloadPacketLoss[selector1]
+      ? speedDownloadPacketLoss[selector1].toFixed(2)
+      : "NuN"
+  );
 
-  if (selectedDates.length === 1) {
-    updateElementText(
-      uj,
-      speedUploadLoadedJitter[selectedDates[0]]
-        ? speedUploadLoadedJitter[selectedDates[0]].toFixed(2)
-        : "NuN"
-    );
-    updateElementText(
-      ul,
-      speedUploadLoadedLatency[selectedDates[0]]
-        ? speedUploadLoadedLatency[selectedDates[0]].toFixed(2)
-        : "NuN"
-    );
-    updateElementText(
-      dj,
-      speedDownloadLoadedJitter[selectedDates[0]]
-        ? speedDownloadLoadedJitter[selectedDates[0]].toFixed(2)
-        : "NuN"
-    );
-    updateElementText(
-      dl,
-      speedDownloadLoadedLatency[selectedDates[0]]
-        ? speedDownloadLoadedLatency[selectedDates[0]].toFixed(2)
-        : "NuN"
-    );
-    updateElementText(
-      dp,
-      speedDownloadPacketLoss[selectedDates[0]]
-        ? speedDownloadPacketLoss[selectedDates[0]].toFixed(2)
-        : "NuN"
-    );
-  } else {
-    updateElementText(uj, getSpeeddata(speedUploadLoadedJitter).toFixed(2));
-    updateElementText(
-      ul,
-
-      getSpeeddata(speedUploadLoadedLatency).toFixed(2)
-    );
-    updateElementText(
-      dj,
-
-      getSpeeddata(speedDownloadLoadedJitter).toFixed(2)
-    );
-    updateElementText(dl, getSpeeddata(speedDownloadLoadedLatency).toFixed(2));
-    updateElementText(dp, getSpeeddata(speedDownloadPacketLoss).toFixed(2));
-    // Add other speed data types as needed
-  }
-
-  function getSpeeddata(type) {
-    let total = 0;
-
-    selectedDates.forEach((date) => {
-      total += type[date] || 0;
-    });
-    return total;
-  }
-
-  drawChart(selectedDates);
+  drawChart(selector1, selector2);
 }
 
 $(document).ready(function () {
   $(".js-example-basic-multiple").select2();
 });
 
-async function createGraph(selectedDate, chartData, title) {
-  if (selectedDate.length === 1) {
-    var data = new google.visualization.DataTable();
-    data.addColumn("string", "Time");
-    data.addColumn("number", "Value");
+async function createGraph(selector1, selector2, data1, data2, title) {
+  var dataTable = new google.visualization.DataTable();
+  dataTable.addColumn("string", "Time");
 
-    // Add data to DataTable based on selected date
-    JSON.parse(chartData).forEach((entry) => {
-      var date = Object.keys(entry)[0];
-      if (date === selectedDate[0]) {
-        entry[date].forEach(([time, value]) => {
-          data.addRow([time, value]);
-        });
-      }
-    });
+  dataTable.addColumn("number", "nuron");
+  dataTable.addColumn("number", `${isp}`);
+  var va = [];
 
-    var options = getChartOptions(title);
-    return { data, options };
-  } else if (selectedDate.length > 1) {
-    var dataTable = new google.visualization.DataTable();
-    dataTable.addColumn("string", "Time");
+  JSON.parse(data1).forEach((ent) => {
+    const currentDate = Object.keys(ent)[0];
+    if (currentDate === selector1) {
+      va.push(ent[currentDate]);
+    }
+  });
 
-    selectedDate.forEach((date) => {
-      dataTable.addColumn("number", date);
-    });
+  JSON.parse(data2).forEach((ent) => {
+    const currentDate = Object.keys(ent)[0];
+    if (currentDate === selector2) {
+      va.push(ent[currentDate]);
+    }
+  });
 
-    var va = [];
+  var combinedData = combineData(selector1, selector2, ...va);
 
-    selectedDate.forEach((dat) => {
-      JSON.parse(chartData).forEach((ent) => {
-        const currentDate = Object.keys(ent)[0];
-        if (currentDate === dat) {
-          va.push(ent[currentDate]);
-        }
-      });
-    });
+  dataTable.addRows(combinedData);
 
-    var combinedData = combineData(selectedDate, ...va);
-    dataTable.addRows(combinedData);
-
-    var options = getChartOptions(title);
-    return { data: dataTable, options };
-  }
+  var options = getChartOptions(title);
+  return { data: dataTable, options };
 }
 
 function getChartOptions(title) {
@@ -229,7 +291,6 @@ function getChartOptions(title) {
 
     curveType: "function",
     hAxis: {
-      format: "HH:mm",
       gridlines: {
         count: 0,
       },
@@ -266,7 +327,8 @@ function getChartOptions(title) {
   };
 }
 
-function combineData(date, ...dataArrays) {
+function combineData(select1, select2, ...dataArrays) {
+  const date = [select1, select2];
   var combinedData = [];
   var mergedTimes = new Set();
 
@@ -291,10 +353,9 @@ function combineData(date, ...dataArrays) {
       values.push(value ? value[1] : null);
     }
 
+    // Check that each entry has the correct number of values
     combinedData.push([time, ...values]);
   }
-
-  // If date array has a length greater than 1, fill in null values
   if (date.length > 1) {
     combinedData.forEach((entry) => {
       while (entry.length < date.length + 1) {
@@ -302,7 +363,6 @@ function combineData(date, ...dataArrays) {
       }
     });
   }
-
   return combinedData;
 }
 function updateElementText(element, text) {

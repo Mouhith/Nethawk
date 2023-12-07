@@ -485,16 +485,16 @@ async function bargraph(selectedDate, chartData, title) {
     "#FF33FF",
   ];
   const options = {
-    title: "Avg Loading Time for websites (in ms)",
+    title: title,
     // pieHole: 0.5,
     pieSliceTextStyle: {
       color: "black",
     },
     // is3D: false,
-    width: 390,
+    width: 210,
 
     legend: {
-      title: "URLs",
+      position: "none",
     },
   };
 
