@@ -138,6 +138,9 @@ app.get("/test", async (req, res) => {
     streamPr,
     streamQualityPreloadingTime,
     browserurl,
+    nuron: false,
+    other: true,
+    isp: "other",
   });
 });
 
