@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -61,18 +60,18 @@
             style="background-color: #a30863; border-bottom: 1px solid #828282"
           >
             <ul class="ulist">
-              <li class="listt active" id="l-1">
+              <li class="list <%= nuron ? 'active' : '' %>" id="l-2">
                 <b></b>
                 <b></b>
-                <a href="#">Nuron</a>
+                <a href="/dashboard/nuron">Nuron</a>
               </li>
 
-              <li class="listt" id="l-2">
+              <li class="list <%= other ? 'active' : '' %>"  id="l-3">
                 <b></b>
                 <b></b>
-                <a href="#">Others</a>
+                <a href="/dashboard/others"><%-isp%></a>
               </li>
-              <li class="listt" id="l-3">
+              <li class="list" id="l-4">
                 <b></b>
                 <b></b>
                 <a href="#">Nuron vs Others</a>
@@ -172,24 +171,20 @@
             />
           </div>
           <ul>
-            <li class="list active" id="l-1">
+            <li class="list <%= nuron ? 'active' : '' %>" id="l-2">
               <b></b>
               <b></b>
-              <a href="#">Nuron</a>
-              <!-- <hr class="hr" /> -->
+              <a href="/dashboard/nuron">Nuron</a>
             </li>
-
-            <li class="list" id="l-2">
+            <li class="list <%= other ? 'active' : '' %>"  id="l-3">
               <b></b>
               <b></b>
-              <a href="#">Others</a>
-              <!-- <hr class="hr" /> -->
+              <a href="/dashboard/others"><%-isp%></a>
             </li>
-            <li class="list" id="l-3">
+            <li class="list" id="l-4">
               <b></b>
               <b></b>
               <a href="#">Nuron vs Others</a>
-              <!-- <hr class="hr" /> -->
             </li>
           </ul>
 
@@ -209,9 +204,6 @@
       <!-- side nav -->
 
       <!-- charts div -->
-=======
-<%- include('partials/header') -%>
->>>>>>> 0d8be1eaea38c81f524ded5525ea448666583439
       <div class="right-container">
         <div class="container2">
           <div class="filter-div">
@@ -336,6 +328,9 @@
         document.querySelector(".filter1").style.display = "none";
       }
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <!-- intojs -->
     <script src="/js/test.js"></script>
 

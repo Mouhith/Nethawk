@@ -1,14 +1,6 @@
 // Initialize chartData directly from the server
-const array = (data) => {
-  const array = Object.entries(data).map(([date, value]) => ({
-    [date]: [[date, value]],
-  }));
-
-  return JSON.stringify(array);
-};
-
 var chartData = data;
-var cardFilter = false;
+
 var speed = JSON.parse(speed);
 
 const speedUploadLoadedJitter = speed.speedUploadLoadedJitter;
@@ -16,7 +8,7 @@ const speedUploadLoadedLatency = speed.speedUploadLoadedLatency;
 const speedDownloadLoadedLatency = speed.speedDownloadLoadedLatency;
 const speedDownloadLoadedJitter = speed.speedDownloadLoadedJitter;
 const speedDownloadPacketLoss = speed.speedDownloadPacketLoss;
-const cardsContainer = document.querySelector(".cards-container");
+
 google.charts.load("current", {
   packages: ["corechart"],
 });
@@ -25,7 +17,6 @@ google.charts.setOnLoadCallback(() => {
   const parsdate = JSON.parse(chartData);
   const lastValue = Object.keys(parsdate[parsdate.length - 1])[0];
   $("#dateDropdown").val([lastValue]).trigger("change");
-  $("#dateDropdown1").val([lastValue]).trigger("change");
 });
 
 async function drawChart(selectedDate) {
@@ -77,39 +68,6 @@ async function drawChart(selectedDate) {
     "Loading Time of Stream"
   );
   await pidrawGraph(selectedDate, browserurl, "bw", "Loading Time of Stream");
-  ///cards
-  if (selectedDate.length > 1) {
-    await barCgart(
-      selectedDate,
-      array(speedUploadLoadedJitter),
-      "uj",
-      "speedUploadLoadedJitter"
-    );
-    await barCgart(
-      selectedDate,
-      array(speedUploadLoadedLatency),
-      "ul",
-      "speedUploadLoadedLatency"
-    );
-    await barCgart(
-      selectedDate,
-      array(speedDownloadLoadedLatency),
-      "dl",
-      "speedDownloadLoadedLatency"
-    );
-    await barCgart(
-      selectedDate,
-      array(speedDownloadLoadedJitter),
-      "dj",
-      "speedDownloadLoadedJitter"
-    );
-    await barCgart(
-      selectedDate,
-      array(speedDownloadPacketLoss),
-      "dp",
-      "speedDownloadPacketLoss"
-    );
-  }
 }
 
 async function drawGraph(selectedDate, data, elementId, title) {
@@ -132,19 +90,7 @@ function pidrawAreaChart(elementId, data, options) {
   );
   chart.draw(data, options);
 }
-/////bar chart
-async function barCgart(selectedDate, data, elementId, title) {
-  const value = await bargraph(selectedDate, data, title);
-  if (value) {
-    barcagrtcreation(elementId, value.data, value.options);
-  }
-}
-function barcagrtcreation(elementId, data, options) {
-  var chart = new google.visualization.ColumnChart(
-    document.getElementById(elementId)
-  );
-  chart.draw(data, options);
-}
+
 ///
 function drawAreaChart(elementId, data, options) {
   var chart = new google.visualization.AreaChart(
@@ -154,41 +100,15 @@ function drawAreaChart(elementId, data, options) {
 }
 
 function updateChart() {
-  let selectedDates;
-  var selector1 = $("#dateDropdown").val();
-  var selector2 = $("#dateDropdown1").val();
-  if (selector1) {
-    selectedDates = selector1;
-  } else if (selector2) {
-    selectedDates = selector2;
-  }
+  var selectedDates = $("#dateDropdown").val();
+
+  const uj = document.getElementById("uj");
+  const ul = document.getElementById("ul");
+  const dj = document.getElementById("dj");
+  const dl = document.getElementById("dl");
+  const dp = document.getElementById("dp");
 
   if (selectedDates.length === 1) {
-    cardsContainer.innerHTML = ` <div class="card" id="Upload_jitter">
-    <h4>Upload Jitter <span>(in ms)</span></h4>
-    <h1 id="uj"></h1>
-  </div>
-  <div class="card" id="uplode_latency">
-    <h4>Upload Latency <span>(in ms)</span></h4>
-    <h1 id="ul"></h1>
-  </div>
-  <div class="card" id="download_itter">
-    <h4>Download Jitter <span>(in ms)</span></h4>
-    <h1 id="dj"></h1>
-  </div>
-  <div class="card" id="download_latency">
-    <h4>Download Latency <span>(in ms)</span></h4>
-    <h1 id="dl" class="dll"></h1>
-  </div>
-  <div class="card" id="packet_loss">
-    <h4>Packet Loss %</h4>
-    <h1 id="dp"></h1>
-  </div>`;
-    const uj = document.getElementById("uj");
-    const ul = document.getElementById("ul");
-    const dj = document.getElementById("dj");
-    const dl = document.getElementById("dl");
-    const dp = document.getElementById("dp");
     updateElementText(
       uj,
       speedUploadLoadedJitter[selectedDates[0]]
@@ -220,23 +140,29 @@ function updateChart() {
         : "NuN"
     );
   } else {
-    cardFilter = true;
-    cardsContainer.innerHTML = `
-    <div class="chart-div" id="chart1">
-    <div id="uj"></div>
-  </div>
-  <div class="chart-div" id="chart1">
-  <div id="ul"></div>
-</div>
-<div class="chart-div" id="chart1">
-<div id="dj"></div>
-</div>
-<div class="chart-div" id="chart1">
-<div id="dl"></div>
-</div>  <div class="chart-div" id="chart1">
-<div id="dp"></div>
-</div>`;
+    updateElementText(uj, getSpeeddata(speedUploadLoadedJitter).toFixed(2));
+    updateElementText(
+      ul,
+
+      getSpeeddata(speedUploadLoadedLatency).toFixed(2)
+    );
+    updateElementText(
+      dj,
+
+      getSpeeddata(speedDownloadLoadedJitter).toFixed(2)
+    );
+    updateElementText(dl, getSpeeddata(speedDownloadLoadedLatency).toFixed(2));
+    updateElementText(dp, getSpeeddata(speedDownloadPacketLoss).toFixed(2));
     // Add other speed data types as needed
+  }
+
+  function getSpeeddata(type) {
+    let total = 0;
+
+    selectedDates.forEach((date) => {
+      total += type[date] || 0;
+    });
+    return total;
   }
 
   drawChart(selectedDates);
@@ -399,65 +325,6 @@ async function piechart(selectedDate, chartData, title) {
         data.addRow([time, 29]);
       });
     }
-  });
-
-  data.addColumn({ type: "string", role: "style" });
-
-  // Define colors array based on the URLs
-  var colors = [
-    "#FF5733",
-    "#33FF57",
-    "#5733FF",
-    "#FFFF33",
-    "#33FFFF",
-    "#FF33FF",
-  ];
-
-  // Add style information to each row
-  for (var i = 0; i < data.getNumberOfRows(); i++) {
-    data.setValue(i, 2, colors[i % colors.length]);
-  }
-  var colors = [
-    "#FF5733",
-    "#33FF57",
-    "#5733FF",
-    "#FFFF33",
-    "#33FFFF",
-    "#FF33FF",
-  ];
-  const options = {
-    title: "Avg Loading Time for websites (in ms)",
-    // pieHole: 0.5,
-    pieSliceTextStyle: {
-      color: "black",
-    },
-    // is3D: false,
-    width: 390,
-
-    legend: {
-      title: "URLs",
-    },
-  };
-
-  return { data, options };
-}
-
-async function bargraph(selectedDate, chartData, title) {
-  var data = new google.visualization.DataTable();
-  data.addColumn("string", "url");
-  data.addColumn("number", "Value");
-
-  // Add data to DataTable based on selected date
-  JSON.parse(chartData).forEach((entry) => {
-    var date = Object.keys(entry)[0];
-    selectedDate.forEach((selectdate) => {
-      if (date === selectdate) {
-        entry[date].forEach(([time, value]) => {
-          console.log(entry[date]);
-          data.addRow([time || date, value || 0]);
-        });
-      }
-    });
   });
 
   data.addColumn({ type: "string", role: "style" });
