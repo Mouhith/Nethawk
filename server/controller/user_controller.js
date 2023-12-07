@@ -10,7 +10,7 @@ const val = require("../tools/chartOperations");
 exports.login = (req, res, next) => {
   try {
     if (req.cookies["NU-NLIC"]) {
-      return res.status(201).redirect("/dashboard");
+      return res.status(201).redirect("/dashboard/nuron");
     }
 
     res.render("login", { message: "" });
@@ -98,7 +98,7 @@ exports.otpVerification = async (req, res, next) => {
     const encryptdata = await crypto.encrypt(cookie_data);
     res.clearCookie("NU-VAL");
     res.cookie("NU-NLIC", encryptdata);
-    res.status(200).redirect("/dashboard");
+    res.status(200).redirect("/dashboard/nuron");
   } catch (error) {
     next(error);
   }
