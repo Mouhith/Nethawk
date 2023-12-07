@@ -109,13 +109,50 @@ function updateChart() {
   const dp = document.getElementById("dp");
 
   if (selectedDates.length === 1) {
-    updateElementText(uj, speedUploadLoadedJitter[selectedDates[0]]);
-    updateElementText(ul, speedUploadLoadedLatency[selectedDates[0]]);
-    updateElementText(dj, speedDownloadLoadedJitter[selectedDates[0]]);
-    updateElementText(dl, speedDownloadLoadedLatency[selectedDates[0]]);
-    updateElementText(dp, speedDownloadPacketLoss[selectedDates[0]]);
+    updateElementText(
+      uj,
+      speedUploadLoadedJitter[selectedDates[0]]
+        ? speedUploadLoadedJitter[selectedDates[0]].toFixed(2)
+        : "NuN"
+    );
+    updateElementText(
+      ul,
+      speedUploadLoadedLatency[selectedDates[0]]
+        ? speedUploadLoadedLatency[selectedDates[0]].toFixed(2)
+        : "NuN"
+    );
+    updateElementText(
+      dj,
+      speedDownloadLoadedJitter[selectedDates[0]]
+        ? speedDownloadLoadedJitter[selectedDates[0]].toFixed(2)
+        : "NuN"
+    );
+    updateElementText(
+      dl,
+      speedDownloadLoadedLatency[selectedDates[0]]
+        ? speedDownloadLoadedLatency[selectedDates[0]].toFixed(2)
+        : "NuN"
+    );
+    updateElementText(
+      dp,
+      speedDownloadPacketLoss[selectedDates[0]]
+        ? speedDownloadPacketLoss[selectedDates[0]].toFixed(2)
+        : "NuN"
+    );
   } else {
-    getSpeeddata(speedUploadLoadedJitter);
+    updateElementText(uj, getSpeeddata(speedUploadLoadedJitter).toFixed(2));
+    updateElementText(
+      ul,
+
+      getSpeeddata(speedUploadLoadedLatency).toFixed(2)
+    );
+    updateElementText(
+      dj,
+
+      getSpeeddata(speedDownloadLoadedJitter).toFixed(2)
+    );
+    updateElementText(dl, getSpeeddata(speedDownloadLoadedLatency).toFixed(2));
+    updateElementText(dp, getSpeeddata(speedDownloadPacketLoss).toFixed(2));
     // Add other speed data types as needed
   }
 
@@ -125,6 +162,7 @@ function updateChart() {
     selectedDates.forEach((date) => {
       total += type[date] || 0;
     });
+    return total;
   }
 
   drawChart(selectedDates);
@@ -185,9 +223,12 @@ function getChartOptions(title) {
   return {
     title: title,
     titleTextStyle: {
-      color: "blue",
-      fontSize: 18,
+      color: "#000",
+      fontSize: 16,
+      bottom: 30,
     },
+    colors: ["#e4118c", "#004411", "#571d43"],
+
     curveType: "function",
     hAxis: {
       format: "HH:mm",
@@ -195,19 +236,22 @@ function getChartOptions(title) {
         count: 0,
       },
     },
+    width: 390,
+    height: 200,
+
     legend: {
       position: "none",
     },
+    backgroundColor: { fill: "#fff" },
+
     vAxis: {
       minValue: 0,
       gridlines: {
         count: 0,
       },
       title: "Time in (ms)",
-      titleTextStyle: {
-        color: "black",
-      },
     },
+
     animation: {
       startup: true,
       duration: 1000,
@@ -237,7 +281,7 @@ function combineData(date, ...dataArrays) {
       mergedTimes = new Set([...mergedTimes, ...data.map((entry) => entry[0])]);
     }
   }
-  console.log(mergedTimes);
+
   // Create combinedData array using mergedTimes
   for (let time of mergedTimes) {
     var values = [];
@@ -311,11 +355,13 @@ async function piechart(selectedDate, chartData, title) {
   ];
   const options = {
     title: "Avg Loading Time for websites (in ms)",
-    pieHole: 0.5,
+    // pieHole: 0.5,
     pieSliceTextStyle: {
       color: "black",
     },
-    is3D: false,
+    // is3D: false,
+    width: 390,
+
     legend: {
       title: "URLs",
     },

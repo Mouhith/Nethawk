@@ -30,7 +30,6 @@ async function nPerf_API(id) {
         const last_id = finalResults[finalResults.length - 1];
 
         await writeFile(last_id.testId);
-
         return finalResults;
       } else {
         console.log("No results found");

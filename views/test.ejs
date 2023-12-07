@@ -1,58 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('partials/header') -%>
+      <div class="right-container">
+        <div class="container2">
+          <div class="filter-div">
+            <p class="filter" onclick="displayDrpdwn()">
+              Filter <i class="fa fa-filter" aria-hidden="true"></i>
+            </p>
+            <div class="date-dropdown">
+              <!-- <label for="dateDropdown" style="opacity: 0;"
+                >Select Date:
+              </label> -->
+              <select
+                id="dateDropdown"
+                onchange="updateChart()"
+                style="width: 100%"
+                class="js-example-basic-multiple"
+                name="dates[]"
+                multiple="multiple"
+              >
+                <% data.forEach(date => { %>
+                <option value="<%- Object.keys(date)[0] %>">
+                  <%- Object.keys(date)[0] %>
+                </option>
+                <% }); %>
+              </select>
+            </div>
+          </div>
+          <div class="cards-container">
+            <div class="card" id="Upload_jitter">
+              <h4>Upload Jitter <span>(in ms)</span></h4>
+              <h1 id="uj"></h1>
+            </div>
+            <div class="card" id="uplode_latency">
+              <h4>Upload Latency <span>(in ms)</span></h4>
+              <h1 id="ul"></h1>
+            </div>
+            <div class="card" id="download_itter">
+              <h4>Download Jitter <span>(in ms)</span></h4>
+              <h1 id="dj"></h1>
+            </div>
+            <div class="card" id="download_latency">
+              <h4>Download Latency <span>(in ms)</span></h4>
+              <h1 id="dl"></h1>
+            </div>
+            <div class="card" id="packet_loss">
+              <h4>Packet Loss %</h4>
+              <h1 id="dp"></h1>
+            </div>
+          </div>
+          <div class="charts-container">
+            <div class="charts">
+              <div class="chart-div" id="chart1">
+                <div id="chart_div"></div>
+              </div>
+              <div class="chart-div" id="chart2">
+                <div id="avg"></div>
+              </div>
+              <div class="chart-div" id="chart3">
+                <div id="packetloss"></div>
+              </div>
+              <div class="chart-div" id="chart4">
+                <div id="up80"></div>
+              </div>
+              <div class="chart-div" id="chart5">
+                <div id="avgupload"></div>
+              </div>
+              <div class="chart-div" id="chart6">
+                <div id="peakupload"></div>
+              </div>
+              <div class="chart-div" id="chart7">
+                <div id="stream"></div>
+              </div>
+              <div class="chart-div" id="chart8">
+                <div id="loadtime"></div>
+              </div>
+              <div class="chart-div" id="chart9">
+                <div id="bw"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Area Chart Example</title>
-  <!-- Include Google Charts library -->
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+      var speed = `<%-JSON.stringify(speed)%>`;
+      var data = `<%-JSON.stringify(data)%>`;
+      var speedDownloadAvgExclFileSlowstart = `<%-JSON.stringify(speedDownloadAvgExclFileSlowstart)%>`;
+      var chartspeedDownloadPacketLoss = `<%-JSON.stringify(chartspeedDownloadPacketLoss)%>`;
+      var speedUploadDuration = `<%-JSON.stringify(speedUploadDuration)%>`;
+      var speedUploadAvgExclFileSlowstart = `<%-JSON.stringify(speedUploadAvgExclFileSlowstart)%>`;
+      var speedUploadFilePeak = `<%-JSON.stringify(speedUploadFilePeak)%>`;
+      var streamPr = `<%-JSON.stringify(streamPr)%>`;
+      var streamQualityPreloadingTime = `<%-JSON.stringify(streamQualityPreloadingTime)%>`;
 
-  
-</head>
+      var browserurl = `<%-JSON.stringify(browserurl)%>`;
 
-<body>
- 
-  <!-- Dropdown for selecting date -->
-  <label for="dateDropdown">Select Date: </label>
-  <select id="dateDropdown" onchange="updateChart()" style="width: 22%;" class="js-example-basic-multiple" name="dates[]" multiple="multiple">
-    <% data.forEach(date => { %>
-    <option value="<%- Object.keys(date)[0] %>"><%- Object.keys(date)[0] %></option>
-    <% }); %>
-  </select>
-
-  <!-- Chart container -->
-  <div id="chart_div" style="width: 50%; height: 400px;"></div>
-  <div id="avg" style="width: 50%; height: 400px;"></div>
-  <div id="packetloss" style="width: 50%; height: 400px;"></div>
-  <div id="up80" style="width: 50%; height: 400px;"></div>
-    <div id="avgupload" style="width: 50%; height: 400px;"></div>
-    <div id="peakupload" style="width: 50%; height: 400px;"></div>
-    <div id="stream" style="width: 50%; height: 400px;"></div>
-        <div id="loadtime" style="width: 50%; height: 400px;"></div>
-        <div id="bw" style="width: 50%; height: 400px;"></div>
-  <h4 id="uj"></h4>
-  <h4 id="ul"></h4>
-  <h4 id="dj"></h4>
-  <h4 id="dl"></h4>
-  <h4 id="dp"></h4>
-  <script>
-    var speed=`<%-JSON.stringify(speed)%>`;
-    var data=`<%-JSON.stringify(data)%>`
-    var speedDownloadAvgExclFileSlowstart=`<%-JSON.stringify(speedDownloadAvgExclFileSlowstart)%>`;
-    var chartspeedDownloadPacketLoss=`<%-JSON.stringify(chartspeedDownloadPacketLoss)%>`;
-    var speedUploadDuration=`<%-JSON.stringify(speedUploadDuration)%>`;
-    var speedUploadAvgExclFileSlowstart=`<%-JSON.stringify(speedUploadAvgExclFileSlowstart)%>`;
-    var speedUploadFilePeak=`<%-JSON.stringify(speedUploadFilePeak)%>`;
-    var streamPr=`<%-JSON.stringify(streamPr)%>`;
-var streamQualityPreloadingTime=`<%-JSON.stringify(streamQualityPreloadingTime)%>`;
-
-var browserurl=`<%-JSON.stringify(browserurl)%>`
-  </script>
-  <script src="/js/chart.js" ></script>
-</body>
-
+      function displayDrpdwn() {
+        document.querySelector(".date-dropdown").style.display = "block";
+        document.querySelector(".filter").style.display = "none";
+      }
+    </script>
+    <!-- intojs -->
+    <script src="/js/test.js"></script>
+    <!-- charts js -->
+    <script src="/js/chart.js"></script>
+  </body>
 </html>

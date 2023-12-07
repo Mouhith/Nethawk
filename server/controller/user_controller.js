@@ -5,6 +5,8 @@ const otp = require("../tools/otp");
 const sms = require("../tools/sms");
 const getToken = require("../tools/superSet");
 const Results = require("../../models/result");
+const chatData = require("../tools/chatDataFilter");
+const val = require("../tools/chartOperations");
 exports.login = (req, res, next) => {
   try {
     if (req.cookies["NU-NLIC"]) {
@@ -141,31 +143,135 @@ exports.logout = async (req, res, next) => {
 
 exports.getDashboard_others = async (req, res, next) => {
   try {
-    const linkURL = false;
-    const dashboard_id = process.env.SUPER_SET_NURON_DASHBOARD_ID;
-    const data = await crypto.decryption(req.cookie);
-    const token = await getToken(data.S_id, linkURL, dashboard_id);
-    ///
-
-    const dat = await Results.findAll({
-      attributes: ["dates"],
-
-      where: {
-        scheduling_name: data.S_id,
-      },
+    const result = await Results.findAll({
+      where: { scheduling_name: "nuron" },
     });
-    const array = dat.map((result) => result.dataValues.dates);
-    const newset = new Set(array);
-    if (newset.size > 1) {
-      linkURL = true;
-    }
-    ///
+    const mapedValues = result.map((result) => result.dataValues);
+    const isp = result.map((result) => result.dataValues.isp);
+    const uisp = new Set(isp);
+    const filteredISP = Array.from(uisp).filter((entry) => {
+      if (entry !== "One Eight Technologies Private IN") {
+        return entry;
+      }
+    });
 
-    res.status(200).render("others", {
-      token: token,
-      db_id: dashboard_id,
-      linkURL,
-      name: "Others",
+    const upload = await chatData.nuroSpeed(
+      mapedValues,
+      false,
+      "speedUploadFile"
+    );
+
+    const download = await chatData.nuroSpeed(
+      mapedValues,
+      false,
+      "speedDownloadFile"
+    );
+    const stream = await chatData.nuroSpeed(mapedValues, false, "streaming");
+    const streamquality = await chatData.nuroSpeed(
+      mapedValues,
+      false,
+      "streaming"
+    );
+    const browser = await chatData.nuroSpeed(mapedValues, false, "browse");
+    const data = await val.group(
+      download,
+      "startDateTimeUtc",
+      "other_speedDownloadDuration"
+    );
+    const speedDownloadAvgExclFileSlowstart = await val.group(
+      download,
+      "startDateTimeUtc",
+      "other_speedDownloadAvgExclFileSlowstart"
+    );
+
+    const chartspeedDownloadPacketLoss = await val.group(
+      download,
+      "startDateTimeUtc",
+      "other_speedDownloadPacketLoss"
+    );
+
+    const speedUploadDuration = await val.group(
+      download,
+      "startDateTimeUtc",
+      "other_speedUploadDuration"
+    );
+    const speedUploadAvgExclFileSlowstart = await val.group(
+      download,
+      "startDateTimeUtc",
+      "other_speedUploadAvgExclFileSlowstart"
+    );
+
+    const speedUploadFilePeak = await val.group(
+      download,
+      "startDateTimeUtc",
+      "other_speedUploadFilePeak"
+    );
+
+    const streamPr = await val.group(
+      stream,
+      "startDateTimeUtc",
+      "other_streamPr"
+    );
+
+    const browserurl = await val.brouseGroup(
+      browser,
+      "other_browserUrl",
+      "other_browseUrlLoadingTime"
+    );
+
+    const streamQualityPreloadingTime = await val.group(
+      streamquality,
+      "startDateTimeUtc",
+      "other_streamQualityPreloadingTime"
+    );
+
+    const [
+      speedUploadLoadedJitter,
+      speedUploadLoadedLatency,
+      speedDownloadLoadedLatency,
+      speedDownloadLoadedJitter,
+      speedDownloadPacketLoss,
+    ] = await Promise.all([
+      val.average(upload, "startDateTimeUtc", "other_speedUploadLoadedJitter"),
+      val.average(upload, "startDateTimeUtc", "other_speedUploadLoadedLatency"),
+      val.average(
+        download,
+        "startDateTimeUtc",
+        "other_speedDownloadLoadedLatency"
+      ),
+      val.average(
+        download,
+        "startDateTimeUtc",
+        "other_speedDownloadLoadedJitter"
+      ),
+      val.average(
+        download,
+        "startDateTimeUtc",
+        "other_speedDownloadPacketLoss"
+      ),
+    ]);
+    const speed = {
+      speedUploadLoadedJitter,
+      speedUploadLoadedLatency,
+      speedDownloadLoadedLatency,
+      speedDownloadLoadedJitter,
+      speedDownloadPacketLoss,
+    };
+
+    res.render("others", {
+      data,
+      speed,
+      speedDownloadAvgExclFileSlowstart,
+      chartspeedDownloadPacketLoss,
+      speedUploadDuration,
+      speedUploadAvgExclFileSlowstart,
+      speedUploadFilePeak,
+      streamPr,
+      streamQualityPreloadingTime,
+      browserurl,
+      nuron: false,
+      other: true,
+      isp: filteredISP[filteredISP.length - 1],
     });
   } catch (error) {
     next(error);
@@ -207,31 +313,118 @@ exports.getnuron_others = async (req, res, next) => {
 
 exports.getDashboard_nuron = async (req, res, next) => {
   try {
-    const linkURL = false;
-    const dashboard_id = process.env.SUPER_SET_NURON_DASHBOARD_ID;
-    const data = await crypto.decryption(req.cookie);
-    const token = await getToken(data.S_id, dashboard_id);
-    ///
-
-    const dat = await Results.findAll({
-      attributes: ["dates"],
-
-      where: {
-        scheduling_name: data.S_id,
-      },
+    const result = await Results.findAll({
+      where: { scheduling_name: "nuron" },
     });
-    const array = dat.map((result) => result.dataValues.dates);
-    const newset = new Set(array);
-    if (newset.size > 1) {
-      linkURL = true;
-    }
-    ///
+    const mapedValues = result.map((result) => result.dataValues);
+    const isp = result.map((result) => result.dataValues.isp);
+    const uisp = new Set(isp);
+    const filteredISP = Array.from(uisp).filter((entry) => {
+      if (entry !== "One Eight Technologies Private IN") {
+        return entry;
+      }
+    });
+
+    const upload = await chatData.nuroSpeed(
+      mapedValues,
+      true,
+      "speedUploadFile"
+    );
+    const download = await chatData.nuroSpeed(
+      mapedValues,
+      true,
+      "speedDownloadFile"
+    );
+    const stream = await chatData.nuroSpeed(mapedValues, true, "streaming");
+    const streamquality = await chatData.nuroSpeed(
+      mapedValues,
+      true,
+      "streaming"
+    );
+    const browser = await chatData.nuroSpeed(mapedValues, true, "browse");
+    const data = await val.group(
+      download,
+      "startDateTimeUtc",
+      "speedDownloadDuration"
+    );
+    const speedDownloadAvgExclFileSlowstart = await val.group(
+      download,
+      "startDateTimeUtc",
+      "speedDownloadAvgExclFileSlowstart"
+    );
+
+    const chartspeedDownloadPacketLoss = await val.group(
+      download,
+      "startDateTimeUtc",
+      "speedDownloadPacketLoss"
+    );
+
+    const speedUploadDuration = await val.group(
+      download,
+      "startDateTimeUtc",
+      "speedUploadDuration"
+    );
+    const speedUploadAvgExclFileSlowstart = await val.group(
+      download,
+      "startDateTimeUtc",
+      "speedUploadAvgExclFileSlowstart"
+    );
+
+    const speedUploadFilePeak = await val.group(
+      download,
+      "startDateTimeUtc",
+      "speedUploadFilePeak"
+    );
+
+    const streamPr = await val.group(stream, "startDateTimeUtc", "streamPr");
+
+    const browserurl = await val.brouseGroup(
+      browser,
+      "browserUrl",
+      "browseUrlLoadingTime"
+    );
+
+    const streamQualityPreloadingTime = await val.group(
+      streamquality,
+      "startDateTimeUtc",
+      "streamQualityPreloadingTime"
+    );
+
+    const [
+      speedUploadLoadedJitter,
+      speedUploadLoadedLatency,
+      speedDownloadLoadedLatency,
+      speedDownloadLoadedJitter,
+      speedDownloadPacketLoss,
+    ] = await Promise.all([
+      val.average(upload, "startDateTimeUtc", "speedUploadLoadedJitter"),
+      val.average(upload, "startDateTimeUtc", "speedUploadLoadedLatency"),
+      val.average(download, "startDateTimeUtc", "speedDownloadLoadedLatency"),
+      val.average(download, "startDateTimeUtc", "speedDownloadLoadedJitter"),
+      val.average(download, "startDateTimeUtc", "speedDownloadPacketLoss"),
+    ]);
+    const speed = {
+      speedUploadLoadedJitter,
+      speedUploadLoadedLatency,
+      speedDownloadLoadedLatency,
+      speedDownloadLoadedJitter,
+      speedDownloadPacketLoss,
+    };
 
     res.status(200).render("nuron", {
-      token: token,
-      db_id: dashboard_id,
-      linkURL,
-      name: "Nuron",
+      data,
+      speed,
+      speedDownloadAvgExclFileSlowstart,
+      chartspeedDownloadPacketLoss,
+      speedUploadDuration,
+      speedUploadAvgExclFileSlowstart,
+      speedUploadFilePeak,
+      streamPr,
+      streamQualityPreloadingTime,
+      browserurl,
+      nuron: true,
+      other: false,
+      isp: filteredISP[filteredISP.length - 1],
     });
   } catch (error) {
     next(error);

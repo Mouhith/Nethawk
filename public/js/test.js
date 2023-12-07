@@ -1,3 +1,16 @@
+// nav
+let listt = document.querySelectorAll(".list");
+for (let i = 0; i < listt.length; i++) {
+  listt[i].addEventListener("click", () => {
+    console.log("hello");
+    let j = 0;
+    while (j < listt.length) {
+      listt[j++].className = "list";
+    }
+    listt[i].className = "list active";
+  });
+}
+// intro js
 introJs()
   .setOptions({
     tooltipClass: "customTooltip",
@@ -41,57 +54,57 @@ introJs()
 
       {
         title: "Time to Download 80 Mb of file (in sec)",
-        element: document.querySelector("#download_80"),
+        element: document.querySelector("#chart1"),
         intro:
           "This Data parameter indicates avg time taken to download a 10mb of binary text (.dat) file while running Network test at different time intervals</br></br> ( A good network has low values of this parameter) ",
       },
       {
         title: "Average Download Speed (in Mb/Sec)",
-        element: document.querySelector("#Avg_download_speed"),
+        element: document.querySelector("#chart2"),
         intro:
           "This Data parameter indicates Average Download (Amount of Data recevied in 1 sec) Speeds achieved while running Network test at different time intervals </br></br>( A good network has high average upload Speeds) ",
       },
       {
         title: "Peak Download Speed (in Mb/sec)",
-        element: document.querySelector("#peak_download_speed"),
+        element: document.querySelector("#chart3"),
         intro:
           "This Data parameter indicates Peak Download (Amount of Data received in 1 sec) Speeds achieved while running Network test at different time intervals </br></br>( A good network has high and consistent peak Download Speeds)",
       },
 
       {
         title: "Time to Upload 80 Mb of file (in Sec)",
-        element: document.querySelector("#upload_80"),
+        element: document.querySelector("#chart4"),
         intro:
           "This Data parameter indicates avg time taken to upload a 10mb of binary text (.dat) file while running Network test at different time intervals </br></br>( A good network has low values of this parameter)",
       },
       {
         title: "Average Upload Speed (in Mb/sec)",
-        element: document.querySelector("#avg_upload"),
+        element: document.querySelector("#chart5"),
         intro:
           "This Data parameter indicates Average Upload (Amount of Data Sent in 1 sec) Speeds achieved while running Network test at different time intervals </br></br>( A good network has high average upload Speeds)",
       },
       {
         title: "Peak Upload Speed (in Mb/sec)",
-        element: document.querySelector("#peak_upload"),
+        element: document.querySelector("#chart6"),
         intro:
           "This Data parameter indicates Peak Upload (Amount of Data Sent in 1 sec) Speeds achieved while running Network test at different time intervals </br></br>( A good network has high and consistent peak upload Speeds)",
       },
 
       {
         title: "Stream Quality Score",
-        element: document.querySelector("#stream_quality"),
+        element: document.querySelector("#chart7"),
         intro:
           "This Data parameter indicates Video Streaming performance by measuring Ratio of Actual Video Duration and Video Playtime. If value of this ratio tends towards 1, paramtere will indiacate 100 Quality Score</br></br>( A good network has high Stream Quality Score)",
       },
       {
         title: "Avg Loading Time for Websites (in Sec)",
-        element: document.querySelector("#browsers"),
+        element: document.querySelector("#chart8"),
         intro:
           "This Data parameter indicates time (in sec) taken by network to load 5 most commonly browsed Websites</br></br>( A good network has low average loading times for Websites)",
       },
       {
         title: "Loading Time of Stream (in Sec)",
-        element: document.querySelector("#loding_time"),
+        element: document.querySelector("#chart9"),
         intro:
           "This Data parameter indicates time (in ms) taken by network to Start a video Stream as soon as user clicks on Play Button </br></br>( A good network has low loading time of Stream)",
       },

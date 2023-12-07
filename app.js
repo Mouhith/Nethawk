@@ -45,11 +45,19 @@ app.use("/admin", require("./server/routes/admin_route"));
 app.get("/test", async (req, res) => {
   const result = await Result.findAll({ where: { scheduling_name: "nuron" } });
   const mapedValues = result.map((result) => result.dataValues);
-  const upload = await chatData.nuroSpeed(mapedValues, "speedUploadFile");
-  const download = await chatData.nuroSpeed(mapedValues, "speedDownloadFile");
-  const stream = await chatData.nuroSpeed(mapedValues, "streaming");
-  const streamquality = await chatData.nuroSpeed(mapedValues, "streaming");
-  const browser = await chatData.nuroSpeed(mapedValues, "browse");
+  const upload = await chatData.nuroSpeed(mapedValues, true, "speedUploadFile");
+  const download = await chatData.nuroSpeed(
+    mapedValues,
+    true,
+    "speedDownloadFile"
+  );
+  const stream = await chatData.nuroSpeed(mapedValues, true, "streaming");
+  const streamquality = await chatData.nuroSpeed(
+    mapedValues,
+    true,
+    "streaming"
+  );
+  const browser = await chatData.nuroSpeed(mapedValues, true, "browse");
   const data = await val.group(
     download,
     "startDateTimeUtc",
