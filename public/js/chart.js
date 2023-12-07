@@ -493,15 +493,34 @@ async function bargraph(selectedDate, chartData, title) {
   ];
   const options = {
     title: title,
+    titleTextStyle: {
+      color: "#000",
+      fontSize: 16,
+    },
+    chartArea: {
+      left: 17,
+      bottom: 30,
+      width: "85%",
+      height: "45%",
+      backgroundColor: "#f5f7f6",
+    },
+    vAxis: {
+      minValue: 0,
+      gridlines: {
+        color: "transparent",
+      },
+    },
+    backgroundColor: { fill: "#ffff" },
     // pieHole: 0.5,
     pieSliceTextStyle: {
       color: "black",
     },
     // is3D: false,
     width: 210,
+    height: 140,
 
     legend: {
-      position: "none",
+      title: "none",
     },
   };
 
