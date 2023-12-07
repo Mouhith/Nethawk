@@ -1,13 +1,23 @@
-// nav
+// side nav
 let listt = document.querySelectorAll(".list");
 for (let i = 0; i < listt.length; i++) {
   listt[i].addEventListener("click", () => {
-    console.log("hello");
     let j = 0;
     while (j < listt.length) {
       listt[j++].className = "list";
     }
     listt[i].className = "list active";
+  });
+}
+// top nav
+let listt1 = document.querySelectorAll(".listt");
+for (let i = 0; i < listt1.length; i++) {
+  listt1[i].addEventListener("click", () => {
+    let j = 0;
+    while (j < listt1.length) {
+      listt1[j++].className = "listt";
+    }
+    listt1[i].className = "listt active";
   });
 }
 // intro js
