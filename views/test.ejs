@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Google Area Chart Example</title>
+    <title>Nethawk - Result Dashboard</title>
+    <!-- favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/nuron-fevicon.png" />
     <!-- font awesome -->
     <link
       rel="stylesheet"
@@ -28,10 +30,137 @@
       href="https://unpkg.com/intro.js@4.2.2/minified/introjs.min.css"
     />
     <script src="https://unpkg.com/intro.js@4.2.2/minified/intro.min.js"></script>
+    <!-- bootstrap cdn -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+      crossorigin="anonymous"
+    ></script>
   </head>
 
   <body>
+    <!-- top nav -->
+    <div class="top-nav">
+      <div class="fixed-top">
+        <div class="collapse" id="navbarToggleExternalContent">
+          <div
+            class="p-4"
+            style="background-color: #a30863; border-bottom: 1px solid #828282"
+          >
+            <ul class="ulist">
+              <li class="listt active" id="l-1">
+                <b></b>
+                <b></b>
+                <a href="#">Nuron</a>
+              </li>
+
+              <li class="listt" id="l-2">
+                <b></b>
+                <b></b>
+                <a href="#">Others</a>
+              </li>
+              <li class="listt" id="l-3">
+                <b></b>
+                <b></b>
+                <a href="#">Nuron vs Others</a>
+              </li>
+            </ul>
+            <div class="dropdown11">
+              <button class="dropbtn1">
+                Nuron_Guest
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </button>
+              <div class="dropdown-content1">
+                <a href="/logout"
+                  >Logout <i class="fa fa-sign-out ml-1" aria-hidden="true"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nav class="navbar navbar-dark top-nav-style">
+          <div class="nuron-logo-div2">
+            <img
+              src="/images/nuron white logo.png"
+              alt="Nuron"
+              class="nuron-logo2"
+            />
+          </div>
+          <div class="btn-filter-div">
+            <div class="filter-div1">
+              <p class="filter1" onclick="displayDrpdwn1()">
+                <svg
+                  class="svg-icon"
+                  style="
+                    width: 1em;
+                    height: 1em;
+                    vertical-align: middle;
+                    fill: currentColor;
+                    overflow: hidden;
+                  "
+                  viewBox="0 0 1024 1024"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M426.666667 768h170.666666v-85.333333h-170.666666v85.333333zM128 256v85.333333h768V256H128z m128 298.666667h512v-85.333334H256v85.333334z"
+                  />
+                </svg>
+                Filter
+              </p>
+              <div class="date-dropdown1">
+                <!-- <label for="dateDropdown" style="opacity: 0;"
+                  >Select Date:
+                </label> -->
+                <select
+                  id="dateDropdow1"
+                  onchange="updateChart()"
+                  style="width: 200px"
+                  class="js-example-basic-multiple"
+                  name="dates[]"
+                  multiple="multiple"
+                >
+                  <% data.forEach(date => { %>
+                  <option value="<%- Object.keys(date)[0] %>">
+                    <%- Object.keys(date)[0] %>
+                  </option>
+                  <% }); %>
+                </select>
+              </div>
+            </div>
+
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarToggleExternalContent"
+              aria-controls="navbarToggleExternalContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <!-- top nav -->
+
+    <!-- content div -->
     <div class="charts-main-div">
+      <!-- side nav -->
       <div class="nav-bar">
         <div class="left-nav-container">
           <div class="nuron-logo-div">
@@ -42,36 +171,25 @@
             />
           </div>
           <ul>
-            <!-- <li class="list active" id="l-1">
-              <b></b>
-              <b></b>
-              <a href="#">Introduction</a>
-            </li> -->
-            <li class="list active" id="l-2">
+            <li class="list active" id="l-1">
               <b></b>
               <b></b>
               <a href="#">Nuron</a>
+              <!-- <hr class="hr" /> -->
+            </li>
+
+            <li class="list" id="l-2">
+              <b></b>
+              <b></b>
+              <a href="#">Others</a>
+              <!-- <hr class="hr" /> -->
             </li>
             <li class="list" id="l-3">
               <b></b>
               <b></b>
-              <a href="#">Others</a>
-            </li>
-            <li class="list" id="l-4">
-              <b></b>
-              <b></b>
               <a href="#">Nuron vs Others</a>
+              <!-- <hr class="hr" /> -->
             </li>
-            <!-- <li class="list" id="l-5">
-              <b></b>
-              <b></b>
-              <a href="#">Link 1</a>
-            </li>
-            <li class="list" id="l-6">
-              <b></b>
-              <b></b>
-              <a href="#">Link 2</a>
-            </li> -->
           </ul>
 
           <div class="dropdown1">
@@ -87,16 +205,34 @@
           </div>
         </div>
       </div>
+      <!-- side nav -->
+
+      <!-- charts div -->
       <div class="right-container">
         <div class="container2">
           <div class="filter-div">
             <p class="filter" onclick="displayDrpdwn()">
-              Filter <i class="fa fa-filter" aria-hidden="true"></i>
+              <svg
+                class="svg-icon"
+                style="
+                  width: 1em;
+                  height: 1em;
+                  vertical-align: middle;
+                  fill: currentColor;
+                  overflow: hidden;
+                "
+                viewBox="0 0 1024 1024"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M426.666667 768h170.666666v-85.333333h-170.666666v85.333333zM128 256v85.333333h768V256H128z m128 298.666667h512v-85.333334H256v85.333334z"
+                />
+              </svg>
+              Filter
             </p>
             <div class="date-dropdown">
-              <!-- <label for="dateDropdown" style="opacity: 0;"
-                >Select Date:
-              </label> -->
+              <!-- <label for="dateDropdown" style="opacity: 1">Select Date: </label> -->
               <select
                 id="dateDropdown"
                 onchange="updateChart()"
@@ -128,7 +264,7 @@
             </div>
             <div class="card" id="download_latency">
               <h4>Download Latency <span>(in ms)</span></h4>
-              <h1 id="dl"></h1>
+              <h1 id="dl" class="dll"></h1>
             </div>
             <div class="card" id="packet_loss">
               <h4>Packet Loss %</h4>
@@ -168,7 +304,9 @@
           </div>
         </div>
       </div>
+      <!-- charts div -->
     </div>
+    <!-- content div -->
 
     <script>
       var speed = `<%-JSON.stringify(speed)%>`;
@@ -182,14 +320,21 @@
       var streamQualityPreloadingTime = `<%-JSON.stringify(streamQualityPreloadingTime)%>`;
 
       var browserurl = `<%-JSON.stringify(browserurl)%>`;
-
+      //  side nav logout js
       function displayDrpdwn() {
         document.querySelector(".date-dropdown").style.display = "block";
         document.querySelector(".filter").style.display = "none";
       }
+
+      //  top nav logout js
+      function displayDrpdwn1() {
+        document.querySelector(".date-dropdown1").style.display = "block";
+        document.querySelector(".filter1").style.display = "none";
+      }
     </script>
     <!-- intojs -->
     <script src="/js/test.js"></script>
+
     <!-- charts js -->
     <script src="/js/chart.js"></script>
   </body>
