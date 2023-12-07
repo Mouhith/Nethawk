@@ -10,7 +10,7 @@ const val = require("../tools/chartOperations");
 exports.login = (req, res, next) => {
   try {
     if (req.cookies["NU-NLIC"]) {
-      return res.status(201).redirect("/dashboard");
+      return res.status(201).redirect("/dashboard/nuron");
     }
 
     res.render("login", { message: "" });
@@ -98,7 +98,7 @@ exports.otpVerification = async (req, res, next) => {
     const encryptdata = await crypto.encrypt(cookie_data);
     res.clearCookie("NU-VAL");
     res.cookie("NU-NLIC", encryptdata);
-    res.status(200).redirect("/dashboard");
+    res.status(200).redirect("/dashboard/nuron");
   } catch (error) {
     next(error);
   }
@@ -146,118 +146,19 @@ exports.getDashboard_others = async (req, res, next) => {
     const result = await Results.findAll({
       where: { scheduling_name: "nuron" },
     });
-    const mapedValues = result.map((result) => result.dataValues);
-    const isp = result.map((result) => result.dataValues.isp);
-    const uisp = new Set(isp);
-    const filteredISP = Array.from(uisp).filter((entry) => {
-      if (entry !== "One Eight Technologies Private IN") {
-        return entry;
-      }
-    });
-
-    const upload = await chatData.nuroSpeed(
-      mapedValues,
-      false,
-      "speedUploadFile"
-    );
-
-    const download = await chatData.nuroSpeed(
-      mapedValues,
-      false,
-      "speedDownloadFile"
-    );
-    const stream = await chatData.nuroSpeed(mapedValues, false, "streaming");
-    const streamquality = await chatData.nuroSpeed(
-      mapedValues,
-      false,
-      "streaming"
-    );
-    const browser = await chatData.nuroSpeed(mapedValues, false, "browse");
-    const data = await val.group(
-      download,
-      "startDateTimeUtc",
-      "other_speedDownloadDuration"
-    );
-    const speedDownloadAvgExclFileSlowstart = await val.group(
-      download,
-      "startDateTimeUtc",
-      "other_speedDownloadAvgExclFileSlowstart"
-    );
-
-    const chartspeedDownloadPacketLoss = await val.group(
-      download,
-      "startDateTimeUtc",
-      "other_speedDownloadPacketLoss"
-    );
-
-    const speedUploadDuration = await val.group(
-      download,
-      "startDateTimeUtc",
-      "other_speedUploadDuration"
-    );
-    const speedUploadAvgExclFileSlowstart = await val.group(
-      download,
-      "startDateTimeUtc",
-      "other_speedUploadAvgExclFileSlowstart"
-    );
-
-    const speedUploadFilePeak = await val.group(
-      download,
-      "startDateTimeUtc",
-      "other_speedUploadFilePeak"
-    );
-
-    const streamPr = await val.group(
-      stream,
-      "startDateTimeUtc",
-      "other_streamPr"
-    );
-
-    const browserurl = await val.brouseGroup(
-      browser,
-      "other_browserUrl",
-      "other_browseUrlLoadingTime"
-    );
-
-    const streamQualityPreloadingTime = await val.group(
-      streamquality,
-      "startDateTimeUtc",
-      "other_streamQualityPreloadingTime"
-    );
-
-    const [
-      speedUploadLoadedJitter,
-      speedUploadLoadedLatency,
-      speedDownloadLoadedLatency,
-      speedDownloadLoadedJitter,
-      speedDownloadPacketLoss,
-    ] = await Promise.all([
-      val.average(upload, "startDateTimeUtc", "other_speedUploadLoadedJitter"),
-      val.average(upload, "startDateTimeUtc", "other_speedUploadLoadedLatency"),
-      val.average(
-        download,
-        "startDateTimeUtc",
-        "other_speedDownloadLoadedLatency"
-      ),
-      val.average(
-        download,
-        "startDateTimeUtc",
-        "other_speedDownloadLoadedJitter"
-      ),
-      val.average(
-        download,
-        "startDateTimeUtc",
-        "other_speedDownloadPacketLoss"
-      ),
-    ]);
-    const speed = {
-      speedUploadLoadedJitter,
-      speedUploadLoadedLatency,
-      speedDownloadLoadedLatency,
-      speedDownloadLoadedJitter,
-      speedDownloadPacketLoss,
-    };
-
+    const {
+      data,
+      speed,
+      speedDownloadAvgExclFileSlowstart,
+      chartspeedDownloadPacketLoss,
+      speedUploadDuration,
+      speedUploadAvgExclFileSlowstart,
+      speedUploadFilePeak,
+      streamPr,
+      streamQualityPreloadingTime,
+      browserurl,
+      filteredISP,
+    } = await otherISPchartData(result);
     res.render("others", {
       data,
       speed,
@@ -280,32 +181,20 @@ exports.getDashboard_others = async (req, res, next) => {
 
 exports.getnuron_others = async (req, res, next) => {
   try {
-    const linkURL = false;
-    const dashboard_id = process.env.SUPER_SET_NURON_DASHBOARD_ID;
-    const data = await crypto.decryption(req.cookie);
-    const token = await getToken(data.S_id, dashboard_id);
-    ///
-
-    const dat = await Results.findAll({
-      attributes: ["dates"],
-
-      where: {
-        scheduling_name: data.S_id,
-      },
+    const result = await Results.findAll({
+      where: { scheduling_name: "nuron" },
     });
-    const array = dat.map((result) => result.dataValues.dates);
-    const newset = new Set(array);
-    if (newset.size > 1) {
-      linkURL = true;
-    }
-    ///
+    const [nuron, otherisp] = await Promise.all([
+      nuronchartData(result),
+      otherISPchartData(result),
+    ]);
 
-    res.status(200).render("nuron_others", {
-      token: token,
-      db_id: dashboard_id,
-      linkURL,
-      name: "Nuron vs Other",
-    });
+    // res.status(200).render("nuron_others", {
+    //   token: token,
+    //   db_id: dashboard_id,
+    //   linkURL,
+    //   name: "Nuron vs Other",
+    // });
   } catch (error) {
     next(error);
   }
@@ -316,100 +205,19 @@ exports.getDashboard_nuron = async (req, res, next) => {
     const result = await Results.findAll({
       where: { scheduling_name: "nuron" },
     });
-    const mapedValues = result.map((result) => result.dataValues);
-    const isp = result.map((result) => result.dataValues.isp);
-    const uisp = new Set(isp);
-    const filteredISP = Array.from(uisp).filter((entry) => {
-      if (entry !== "One Eight Technologies Private IN") {
-        return entry;
-      }
-    });
-
-    const upload = await chatData.nuroSpeed(
-      mapedValues,
-      true,
-      "speedUploadFile"
-    );
-    const download = await chatData.nuroSpeed(
-      mapedValues,
-      true,
-      "speedDownloadFile"
-    );
-    const stream = await chatData.nuroSpeed(mapedValues, true, "streaming");
-    const streamquality = await chatData.nuroSpeed(
-      mapedValues,
-      true,
-      "streaming"
-    );
-    const browser = await chatData.nuroSpeed(mapedValues, true, "browse");
-    const data = await val.group(
-      download,
-      "startDateTimeUtc",
-      "speedDownloadDuration"
-    );
-    const speedDownloadAvgExclFileSlowstart = await val.group(
-      download,
-      "startDateTimeUtc",
-      "speedDownloadAvgExclFileSlowstart"
-    );
-
-    const chartspeedDownloadPacketLoss = await val.group(
-      download,
-      "startDateTimeUtc",
-      "speedDownloadPacketLoss"
-    );
-
-    const speedUploadDuration = await val.group(
-      download,
-      "startDateTimeUtc",
-      "speedUploadDuration"
-    );
-    const speedUploadAvgExclFileSlowstart = await val.group(
-      download,
-      "startDateTimeUtc",
-      "speedUploadAvgExclFileSlowstart"
-    );
-
-    const speedUploadFilePeak = await val.group(
-      download,
-      "startDateTimeUtc",
-      "speedUploadFilePeak"
-    );
-
-    const streamPr = await val.group(stream, "startDateTimeUtc", "streamPr");
-
-    const browserurl = await val.brouseGroup(
-      browser,
-      "browserUrl",
-      "browseUrlLoadingTime"
-    );
-
-    const streamQualityPreloadingTime = await val.group(
-      streamquality,
-      "startDateTimeUtc",
-      "streamQualityPreloadingTime"
-    );
-
-    const [
-      speedUploadLoadedJitter,
-      speedUploadLoadedLatency,
-      speedDownloadLoadedLatency,
-      speedDownloadLoadedJitter,
-      speedDownloadPacketLoss,
-    ] = await Promise.all([
-      val.average(upload, "startDateTimeUtc", "speedUploadLoadedJitter"),
-      val.average(upload, "startDateTimeUtc", "speedUploadLoadedLatency"),
-      val.average(download, "startDateTimeUtc", "speedDownloadLoadedLatency"),
-      val.average(download, "startDateTimeUtc", "speedDownloadLoadedJitter"),
-      val.average(download, "startDateTimeUtc", "speedDownloadPacketLoss"),
-    ]);
-    const speed = {
-      speedUploadLoadedJitter,
-      speedUploadLoadedLatency,
-      speedDownloadLoadedLatency,
-      speedDownloadLoadedJitter,
-      speedDownloadPacketLoss,
-    };
+    const {
+      data,
+      speed,
+      speedDownloadAvgExclFileSlowstart,
+      chartspeedDownloadPacketLoss,
+      speedUploadDuration,
+      speedUploadAvgExclFileSlowstart,
+      speedUploadFilePeak,
+      streamPr,
+      streamQualityPreloadingTime,
+      browserurl,
+      filteredISP,
+    } = await nuronchartData(result);
 
     res.status(200).render("nuron", {
       data,
@@ -425,8 +233,239 @@ exports.getDashboard_nuron = async (req, res, next) => {
       nuron: true,
       other: false,
       isp: filteredISP[filteredISP.length - 1],
+      cardFilter: false,
     });
   } catch (error) {
     next(error);
   }
 };
+
+async function nuronchartData(result) {
+  const mapedValues = result.map((result) => result.dataValues);
+  const isp = result.map((result) => result.dataValues.isp);
+  const uisp = new Set(isp);
+  const filteredISP = Array.from(uisp).filter((entry) => {
+    if (entry !== "One Eight Technologies Private IN") {
+      return entry;
+    }
+  });
+
+  const upload = await chatData.nuroSpeed(mapedValues, true, "speedUploadFile");
+  const download = await chatData.nuroSpeed(
+    mapedValues,
+    true,
+    "speedDownloadFile"
+  );
+  const stream = await chatData.nuroSpeed(mapedValues, true, "streaming");
+  const streamquality = await chatData.nuroSpeed(
+    mapedValues,
+    true,
+    "streaming"
+  );
+  const browser = await chatData.nuroSpeed(mapedValues, true, "browse");
+  const data = await val.group(
+    download,
+    "startDateTimeUtc",
+    "speedDownloadDuration"
+  );
+  const speedDownloadAvgExclFileSlowstart = await val.group(
+    download,
+    "startDateTimeUtc",
+    "speedDownloadAvgExclFileSlowstart"
+  );
+
+  const chartspeedDownloadPacketLoss = await val.group(
+    download,
+    "startDateTimeUtc",
+    "speedDownloadPacketLoss"
+  );
+
+  const speedUploadDuration = await val.group(
+    download,
+    "startDateTimeUtc",
+    "speedUploadDuration"
+  );
+  const speedUploadAvgExclFileSlowstart = await val.group(
+    download,
+    "startDateTimeUtc",
+    "speedUploadAvgExclFileSlowstart"
+  );
+
+  const speedUploadFilePeak = await val.group(
+    download,
+    "startDateTimeUtc",
+    "speedUploadFilePeak"
+  );
+
+  const streamPr = await val.group(stream, "startDateTimeUtc", "streamPr");
+
+  const browserurl = await val.brouseGroup(
+    browser,
+    "browserUrl",
+    "browseUrlLoadingTime"
+  );
+
+  const streamQualityPreloadingTime = await val.group(
+    streamquality,
+    "startDateTimeUtc",
+    "streamQualityPreloadingTime"
+  );
+
+  const [
+    speedUploadLoadedJitter,
+    speedUploadLoadedLatency,
+    speedDownloadLoadedLatency,
+    speedDownloadLoadedJitter,
+    speedDownloadPacketLoss,
+  ] = await Promise.all([
+    val.average(upload, "startDateTimeUtc", "speedUploadLoadedJitter"),
+    val.average(upload, "startDateTimeUtc", "speedUploadLoadedLatency"),
+    val.average(download, "startDateTimeUtc", "speedDownloadLoadedLatency"),
+    val.average(download, "startDateTimeUtc", "speedDownloadLoadedJitter"),
+    val.average(download, "startDateTimeUtc", "speedDownloadPacketLoss"),
+  ]);
+  const speed = {
+    speedUploadLoadedJitter,
+    speedUploadLoadedLatency,
+    speedDownloadLoadedLatency,
+    speedDownloadLoadedJitter,
+    speedDownloadPacketLoss,
+  };
+
+  return {
+    data,
+    speed,
+    speedDownloadAvgExclFileSlowstart,
+    chartspeedDownloadPacketLoss,
+    speedUploadDuration,
+    speedUploadAvgExclFileSlowstart,
+    speedUploadFilePeak,
+    streamPr,
+    streamQualityPreloadingTime,
+    browserurl,
+    filteredISP,
+  };
+}
+
+async function otherISPchartData(result) {
+  const mapedValues = result.map((result) => result.dataValues);
+  const isp = result.map((result) => result.dataValues.isp);
+  const uisp = new Set(isp);
+  const filteredISP = Array.from(uisp).filter((entry) => {
+    if (entry !== "One Eight Technologies Private IN") {
+      return entry;
+    }
+  });
+
+  const upload = await chatData.nuroSpeed(
+    mapedValues,
+    false,
+    "speedUploadFile"
+  );
+
+  const download = await chatData.nuroSpeed(
+    mapedValues,
+    false,
+    "speedDownloadFile"
+  );
+  const stream = await chatData.nuroSpeed(mapedValues, false, "streaming");
+  const streamquality = await chatData.nuroSpeed(
+    mapedValues,
+    false,
+    "streaming"
+  );
+  const browser = await chatData.nuroSpeed(mapedValues, false, "browse");
+  const data = await val.group(
+    download,
+    "startDateTimeUtc",
+    "other_speedDownloadDuration"
+  );
+  const speedDownloadAvgExclFileSlowstart = await val.group(
+    download,
+    "startDateTimeUtc",
+    "other_speedDownloadAvgExclFileSlowstart"
+  );
+
+  const chartspeedDownloadPacketLoss = await val.group(
+    download,
+    "startDateTimeUtc",
+    "other_speedDownloadPacketLoss"
+  );
+
+  const speedUploadDuration = await val.group(
+    download,
+    "startDateTimeUtc",
+    "other_speedUploadDuration"
+  );
+  const speedUploadAvgExclFileSlowstart = await val.group(
+    download,
+    "startDateTimeUtc",
+    "other_speedUploadAvgExclFileSlowstart"
+  );
+
+  const speedUploadFilePeak = await val.group(
+    download,
+    "startDateTimeUtc",
+    "other_speedUploadFilePeak"
+  );
+
+  const streamPr = await val.group(
+    stream,
+    "startDateTimeUtc",
+    "other_streamPr"
+  );
+
+  const browserurl = await val.brouseGroup(
+    browser,
+    "other_browserUrl",
+    "other_browseUrlLoadingTime"
+  );
+
+  const streamQualityPreloadingTime = await val.group(
+    streamquality,
+    "startDateTimeUtc",
+    "other_streamQualityPreloadingTime"
+  );
+
+  const [
+    speedUploadLoadedJitter,
+    speedUploadLoadedLatency,
+    speedDownloadLoadedLatency,
+    speedDownloadLoadedJitter,
+    speedDownloadPacketLoss,
+  ] = await Promise.all([
+    val.average(upload, "startDateTimeUtc", "other_speedUploadLoadedJitter"),
+    val.average(upload, "startDateTimeUtc", "other_speedUploadLoadedLatency"),
+    val.average(
+      download,
+      "startDateTimeUtc",
+      "other_speedDownloadLoadedLatency"
+    ),
+    val.average(
+      download,
+      "startDateTimeUtc",
+      "other_speedDownloadLoadedJitter"
+    ),
+    val.average(download, "startDateTimeUtc", "other_speedDownloadPacketLoss"),
+  ]);
+  const speed = {
+    speedUploadLoadedJitter,
+    speedUploadLoadedLatency,
+    speedDownloadLoadedLatency,
+    speedDownloadLoadedJitter,
+    speedDownloadPacketLoss,
+  };
+  return {
+    data,
+    speed,
+    speedDownloadAvgExclFileSlowstart,
+    chartspeedDownloadPacketLoss,
+    speedUploadDuration,
+    speedUploadAvgExclFileSlowstart,
+    speedUploadFilePeak,
+    streamPr,
+    streamQualityPreloadingTime,
+    browserurl,
+    filteredISP,
+  };
+}

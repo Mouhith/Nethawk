@@ -1,31 +1,149 @@
-
 <%- include('partials/header') -%>
-    <div class="right-container">
-      <div id="dashboard-container"></div>
+<div class="right-container">
+  <div class="container2">
+    <div class="filter-div">
+      <p class="filter" onclick="displayDrpdwn()">
+        <svg
+          class="svg-icon"
+          style="
+            width: 1em;
+            height: 1em;
+            vertical-align: middle;
+            fill: currentColor;
+            overflow: hidden;
+          "
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M426.666667 768h170.666666v-85.333333h-170.666666v85.333333zM128 256v85.333333h768V256H128z m128 298.666667h512v-85.333334H256v85.333334z"
+          />
+        </svg>
+        Filter
+      </p>
+      <div class="date-dropdown">
+        <!-- <label for="dateDropdown" style="opacity: 1">Select Date: </label> -->
+        <select
+          id="dateDropdown"
+          onchange="updateChart()"
+          style="width: 100%"
+          class="js-example-basic-multiple"
+          name="nuron[]"
+          multiple="multiple"
+        >
+          <% data.forEach(date => { %>
+          <option value="<%- Object.keys(date)[0] %>">
+            <%- Object.keys(date)[0] %>
+          </option>
+          <% }); %>
+        </select>
+        <select
+          id="dateDropdown"
+          onchange="updateChart()"
+          style="width: 100%"
+          class="js-example-basic-multiple"
+          name="others[]"
+          multiple="multiple"
+        >
+          <% data.forEach(date => { %>
+          <option value="<%- Object.keys(date)[0] %>">
+            <%- Object.keys(date)[0] %>
+          </option>
+          <% }); %>
+        </select>
       </div>
     </div>
-    <script>
-      // Token for authentication
-      let token =` <%= token%>`;
+    <div class="cards-container">
+      <div class="card" id="Upload_jitter">
+        <h4>Upload Jitter <span>(in ms)</span></h4>
+        <h1 id="uj"></h1>
+      </div>
+      <div class="card" id="uplode_latency">
+        <h4>Upload Latency <span>(in ms)</span></h4>
+        <h1 id="ul"></h1>
+      </div>
+      <div class="card" id="download_itter">
+        <h4>Download Jitter <span>(in ms)</span></h4>
+        <h1 id="dj"></h1>
+      </div>
+      <div class="card" id="download_latency">
+        <h4>Download Latency <span>(in ms)</span></h4>
+        <h1 id="dl" class="dll"></h1>
+      </div>
+      <div class="card" id="packet_loss">
+        <h4>Packet Loss %</h4>
+        <h1 id="dp"></h1>
+      </div>
+    </div>
+    <div class="charts-container">
+      <div class="charts">
+        <div class="chart-div" id="chart1">
+          <div id="chart_div"></div>
+        </div>
+        <div class="chart-div" id="chart2">
+          <div id="avg"></div>
+        </div>
+        <div class="chart-div" id="chart3">
+          <div id="packetloss"></div>
+        </div>
+        <div class="chart-div" id="chart4">
+          <div id="up80"></div>
+        </div>
+        <div class="chart-div" id="chart5">
+          <div id="avgupload"></div>
+        </div>
+        <div class="chart-div" id="chart6">
+          <div id="peakupload"></div>
+        </div>
+        <div class="chart-div" id="chart7">
+          <div id="stream"></div>
+        </div>
+        <div class="chart-div" id="chart8">
+          <div id="loadtime"></div>
+        </div>
+        <div class="chart-div" id="chart9">
+          <div id="bw"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- charts div -->
+</div>
+<!-- content div -->
 
-      // Embed the Superset dashboard
-      supersetEmbeddedSdk.embedDashboard({
-          id: `<%= db_id%>`,  
-          supersetDomain: "http://localhost:8088", 
-          mountPoint: document.getElementById("dashboard-container"), 
-          fetchGuestToken: () => token,
-          dashboardUiConfig: {
-              hideTitle: true,
-              hideChartControls: true,
-              filters: {
-                  visible: false,
-                  expanded: false,
-              }
-          }
-      })
-      .then(res => console.log("Dashboard embedded successfully"))
-      .catch(error => console.error("Error embedding dashboard:", error));
-  </script>
+<script>
+var speed = `<%-JSON.stringify(speed)%>`;
+var data = `<%-JSON.stringify(data)%>`;
+var speedDownloadAvgExclFileSlowstart = `<%-JSON.stringify(speedDownloadAvgExclFileSlowstart)%>`;
+var chartspeedDownloadPacketLoss = `<%-JSON.stringify(chartspeedDownloadPacketLoss)%>`;
+var speedUploadDuration = `<%-JSON.stringify(speedUploadDuration)%>`;
+var speedUploadAvgExclFileSlowstart = `<%-JSON.stringify(speedUploadAvgExclFileSlowstart)%>`;
+var speedUploadFilePeak = `<%-JSON.stringify(speedUploadFilePeak)%>`;
+var streamPr = `<%-JSON.stringify(streamPr)%>`;
+var streamQualityPreloadingTime = `<%-JSON.stringify(streamQualityPreloadingTime)%>`;
 
-  </body>
+var browserurl = `<%-JSON.stringify(browserurl)%>`;
+//  side nav logout js
+function displayDrpdwn() {
+  document.querySelector(".date-dropdown").style.display = "block";
+  document.querySelector(".filter").style.display = "none";
+}
+
+//  top nav logout js
+function displayDrpdwn1() {
+  document.querySelector(".date-dropdown1").style.display = "block";
+  document.querySelector(".filter1").style.display = "none";
+}
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<!-- intojs -->
+
+
+<!-- charts js -->
+<script src="/js/nuron_others.js"></script>
+</body>
 </html>
