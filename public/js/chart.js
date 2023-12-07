@@ -83,31 +83,31 @@ async function drawChart(selectedDate) {
       selectedDate,
       array(speedUploadLoadedJitter),
       "uj",
-      "speedUploadLoadedJitter"
+      "Upload Jitter (in ms)"
     );
     await barCgart(
       selectedDate,
       array(speedUploadLoadedLatency),
       "ul",
-      "speedUploadLoadedLatency"
+      "Upload Latency (in ms)"
     );
     await barCgart(
       selectedDate,
       array(speedDownloadLoadedLatency),
       "dl",
-      "speedDownloadLoadedLatency"
+      "Download Latency (in ms)"
     );
     await barCgart(
       selectedDate,
       array(speedDownloadLoadedJitter),
       "dj",
-      "speedDownloadLoadedJitter"
+      "Download Jitter (in ms)"
     );
     await barCgart(
       selectedDate,
       array(speedDownloadPacketLoss),
       "dp",
-      "speedDownloadPacketLoss"
+      "Packet Loss %"
     );
   }
 }
@@ -222,20 +222,23 @@ function updateChart() {
   } else {
     cardFilter = true;
     cardsContainer.innerHTML = `
-    <div class="chart-div" id="chart1">
-    <div id="uj"></div>
-  </div>
-  <div class="chart-div" id="chart1">
-  <div id="ul"></div>
-</div>
-<div class="chart-div" id="chart1">
-<div id="dj"></div>
-</div>
-<div class="chart-div" id="chart1">
-<div id="dl"></div>
-</div>  <div class="chart-div" id="chart1">
-<div id="dp"></div>
-</div>`;
+    <div class="div22">
+    <div class="chart-divv" id="chart11">
+       <div id="uj"></div>
+    </div>
+    <div class="chart-divv" id="chart12">
+       <div id="ul"></div>
+    </div>
+    <div class="chart-divv" id="chart13">
+       <div id="dj"></div>
+    </div>
+    <div class="chart-divv" id="chart14">
+       <div id="dl"></div>
+    </div>  
+    <div class="chart-divv" id="chart15">
+       <div id="dp"></div>
+    </div>
+    </div>`;
     // Add other speed data types as needed
   }
 
@@ -437,6 +440,10 @@ async function piechart(selectedDate, chartData, title) {
     legend: {
       title: "URLs",
     },
+    titleTextStyle: {
+      color: "#000",
+      fontSize: 16,
+    },
   };
 
   return { data, options };
@@ -485,16 +492,35 @@ async function bargraph(selectedDate, chartData, title) {
     "#FF33FF",
   ];
   const options = {
-    title: "Avg Loading Time for websites (in ms)",
+    title: title,
+    titleTextStyle: {
+      color: "#000",
+      fontSize: 16,
+    },
+    chartArea: {
+      left: 17,
+      bottom: 30,
+      width: "85%",
+      height: "45%",
+      backgroundColor: "#f5f7f6",
+    },
+    vAxis: {
+      minValue: 0,
+      gridlines: {
+        color: "transparent",
+      },
+    },
+    backgroundColor: { fill: "#ffff" },
     // pieHole: 0.5,
     pieSliceTextStyle: {
       color: "black",
     },
     // is3D: false,
-    width: 390,
+    width: 210,
+    height: 140,
 
     legend: {
-      title: "URLs",
+      title: "none",
     },
   };
 
