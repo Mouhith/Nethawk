@@ -106,17 +106,18 @@ introJs()
         intro:
           "This Data parameter indicates Video Streaming performance by measuring Ratio of Actual Video Duration and Video Playtime. If value of this ratio tends towards 1, paramtere will indiacate 100 Quality Score</br></br>( A good network has high Stream Quality Score)",
       },
-      {
-        title: "Avg Loading Time for Websites (in Sec)",
-        element: document.querySelector("#chart8"),
-        intro:
-          "This Data parameter indicates time (in sec) taken by network to load 5 most commonly browsed Websites</br></br>( A good network has low average loading times for Websites)",
-      },
+
       {
         title: "Loading Time of Stream (in Sec)",
-        element: document.querySelector("#chart9"),
+        element: document.querySelector("#chart8"),
         intro:
           "This Data parameter indicates time (in ms) taken by network to Start a video Stream as soon as user clicks on Play Button </br></br>( A good network has low loading time of Stream)",
+      },
+      {
+        title: "Avg Loading Time for Websites (in Sec)",
+        element: document.querySelector("#chart9"),
+        intro:
+          "This Data parameter indicates time (in sec) taken by network to load 5 most commonly browsed Websites</br></br>( A good network has low average loading times for Websites)",
       },
     ],
   })
