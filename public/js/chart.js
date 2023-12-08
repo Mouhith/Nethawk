@@ -1,4 +1,5 @@
 // Initialize chartData directly from the server
+
 const array = (data) => {
   const array = Object.entries(data).map(([date, value]) => ({
     [date]: [[date, value]],
@@ -23,9 +24,11 @@ google.charts.load("current", {
 
 google.charts.setOnLoadCallback(() => {
   const parsdate = JSON.parse(chartData);
-  const lastValue = Object.keys(parsdate[parsdate.length - 1])[0];
-  $("#dateDropdown").val([lastValue]).trigger("change");
-  $("#dateDropdown1").val([lastValue]).trigger("change");
+  if (parsdate != 0) {
+    const lastValue = Object.keys(parsdate[parsdate.length - 1])[0];
+    $("#dateDropdown").val([lastValue]).trigger("change");
+    $("#dateDropdown1").val([lastValue]).trigger("change");
+  }
 });
 
 async function drawChart(selectedDate) {

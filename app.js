@@ -41,110 +41,6 @@ app.use("/", require("./server/routes/user_route"));
 app.use("/employee", require("./server/routes/employee_route"));
 app.use("/admin", require("./server/routes/admin_route"));
 
-//test
-app.get("/test", async (req, res) => {
-  const result = await Result.findAll({ where: { scheduling_name: "nuron" } });
-  const mapedValues = result.map((result) => result.dataValues);
-  const upload = await chatData.nuroSpeed(mapedValues, true, "speedUploadFile");
-  const download = await chatData.nuroSpeed(
-    mapedValues,
-    true,
-    "speedDownloadFile"
-  );
-  const stream = await chatData.nuroSpeed(mapedValues, true, "streaming");
-  const streamquality = await chatData.nuroSpeed(
-    mapedValues,
-    true,
-    "streaming"
-  );
-  const browser = await chatData.nuroSpeed(mapedValues, true, "browse");
-  const data = await val.group(
-    download,
-    "startDateTimeUtc",
-    "speedDownloadDuration"
-  );
-  const speedDownloadAvgExclFileSlowstart = await val.group(
-    download,
-    "startDateTimeUtc",
-    "speedDownloadAvgExclFileSlowstart"
-  );
-
-  const chartspeedDownloadPacketLoss = await val.group(
-    download,
-    "startDateTimeUtc",
-    "speedDownloadPacketLoss"
-  );
-
-  const speedUploadDuration = await val.group(
-    download,
-    "startDateTimeUtc",
-    "speedUploadDuration"
-  );
-  const speedUploadAvgExclFileSlowstart = await val.group(
-    download,
-    "startDateTimeUtc",
-    "speedUploadAvgExclFileSlowstart"
-  );
-
-  const speedUploadFilePeak = await val.group(
-    download,
-    "startDateTimeUtc",
-    "speedUploadFilePeak"
-  );
-
-  const streamPr = await val.group(stream, "startDateTimeUtc", "streamPr");
-
-  const browserurl = await val.brouseGroup(
-    browser,
-    "browserUrl",
-    "browseUrlLoadingTime"
-  );
-
-  const streamQualityPreloadingTime = await val.group(
-    streamquality,
-    "startDateTimeUtc",
-    "streamQualityPreloadingTime"
-  );
-
-  const [
-    speedUploadLoadedJitter,
-    speedUploadLoadedLatency,
-    speedDownloadLoadedLatency,
-    speedDownloadLoadedJitter,
-    speedDownloadPacketLoss,
-  ] = await Promise.all([
-    val.average(upload, "startDateTimeUtc", "speedUploadLoadedJitter"),
-    val.average(upload, "startDateTimeUtc", "speedUploadLoadedLatency"),
-    val.average(download, "startDateTimeUtc", "speedDownloadLoadedLatency"),
-    val.average(download, "startDateTimeUtc", "speedDownloadLoadedJitter"),
-    val.average(download, "startDateTimeUtc", "speedDownloadPacketLoss"),
-  ]);
-  const speed = {
-    speedUploadLoadedJitter,
-    speedUploadLoadedLatency,
-    speedDownloadLoadedLatency,
-    speedDownloadLoadedJitter,
-    speedDownloadPacketLoss,
-  };
-
-  res.render("test", {
-    data,
-    speed,
-    speedDownloadAvgExclFileSlowstart,
-    chartspeedDownloadPacketLoss,
-    speedUploadDuration,
-    speedUploadAvgExclFileSlowstart,
-    speedUploadFilePeak,
-    streamPr,
-    streamQualityPreloadingTime,
-    browserurl,
-    nuron: false,
-    other: true,
-    isp: "other",
-  });
-});
-
-///
 app.use((err, req, res, next) => {
   let status = 500;
   let message = "Internal server error";
@@ -157,7 +53,9 @@ app.use((err, req, res, next) => {
 
   res.status(status).json({ error: message });
 });
-
+app.use((req, res, next) => {
+  res.status(404).send("Not Found");
+});
 // Define associations
 User_credentials.hasOne(Employee);
 Employee.belongsTo(User_credentials);

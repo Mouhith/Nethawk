@@ -172,6 +172,7 @@ exports.getDashboard_others = async (req, res, next) => {
       browserurl,
       nuron: false,
       other: true,
+      nuron_other: false,
       isp: filteredISP[filteredISP.length - 1],
     });
   } catch (error) {
@@ -213,8 +214,9 @@ exports.getnuron_others = async (req, res, next) => {
       other_streamPr: otherisp.streamPr,
       other_streamQualityPreloadingTime: otherisp.streamQualityPreloadingTime,
       other_browserurl: otherisp.browserurl,
-      nuron: true,
+      nuron: false,
       other: false,
+      nuron_other: true,
       isp: nuron.filteredISP[nuron.filteredISP.length - 1],
     });
   } catch (error) {
@@ -225,7 +227,7 @@ exports.getnuron_others = async (req, res, next) => {
 exports.getDashboard_nuron = async (req, res, next) => {
   try {
     const result = await Results.findAll({
-      where: { scheduling_name: "nuron" },
+      where: { scheduling_name: "Mth" },
     });
     const {
       data,
@@ -254,6 +256,7 @@ exports.getDashboard_nuron = async (req, res, next) => {
       browserurl,
       nuron: true,
       other: false,
+      nuron_other: false,
       isp: filteredISP[filteredISP.length - 1],
     });
   } catch (error) {

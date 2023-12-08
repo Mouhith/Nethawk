@@ -69,12 +69,13 @@
               <li class="list <%= other ? 'active' : '' %>" id="l-3">
                 <b></b>
                 <b></b>
-                <a href="/dashboard/others"><%-isp%></a>
-              </li>
-              <li class="list" id="l-4">
+     
+                <a href="/dashboard/others"><%-isp || "other"%></a>
+               
+              <li class="list <%= nuron_other ? 'active' : '' %>" id="l-4">
                 <b></b>
                 <b></b>
-                <a href="">Nuron vs Others</a>
+                <a href="/dashboard/nuron-other">Nuron vs Others</a>
               </li>
             </ul>
             <div class="dropdown11">
@@ -137,9 +138,9 @@
             <li class="list <%= other ? 'active' : '' %>" id="l-3">
               <b></b>
               <b></b>
-              <a href="/dashboard/others"><%-isp%></a>
+              <a href="/dashboard/others"><%-isp || "other"%></a>
             </li>
-            <li class="list" id="l-4">
+            <li class="list <%= nuron_other ? 'active' : '' %>" id="l-4">
               <b></b>
               <b></b>
               <a href="/dashboard/nuron-other">Nuron vs Others</a>

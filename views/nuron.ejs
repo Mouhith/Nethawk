@@ -1,6 +1,8 @@
 <%- include('partials/header') -%>
 <div class="right-container">
-  <div class="container2">
+  <% if(data.length!=0){%>
+  <div style="background-image: url(`/images/bg.svg`);" class="container2">
+  
     <div class="filter-div">
       <p class="filter" onclick="displayDrpdwn()">
         <svg
@@ -96,6 +98,12 @@
     </div>
   </div>
 </div>
+  <script src="/js/test.js"></script>
+  <%} else{%>
+    <div style="background-image: url(/images/nodata.png); min-height: 100vh; background-repeat: no-repeat;background-size: cover;" class="container2">
+      <div>
+    <%} %>
+
 <!-- charts div -->
 </div>
 <!-- content div -->
@@ -128,7 +136,7 @@ function displayDrpdwn1() {
 <!-- Include Select2 JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <!-- intojs -->
-<script src="/js/test.js"></script>
+
 
 <!-- charts js -->
 <script src="/js/chart.js"></script>
