@@ -20,7 +20,7 @@
   top: 0;
 }
 .container2 {
-  position: relative;
+  /* position: absolute; */
   width: 85vw;
   padding-right: 5px;
   padding-left: 1px;
@@ -37,7 +37,16 @@
 }
 .date-dropdown {
   display: none;
-  width: 250px;
+  width: 400px;
+}
+.date-dropdownnnn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.date-dropdownnnn div:nth-child(1) {
+  margin-right: 15px;
+  margin-top: 11px;
 }
 
 .filter {
@@ -75,6 +84,7 @@
   justify-content: flex-start;
   align-items: center;
   padding-top: 20px;
+  margin-bottom: 10px;
 }
 
 .card h4 {
@@ -95,7 +105,51 @@
   background-color: #a30863;
   color: #fff;
 }
+.cards-containerr {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.cardd {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 390px;
+  min-height: 130px;
 
+  border-radius: 15px !important;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+.cardd div:nth-child(1) {
+  margin-right: 7px;
+  width: 160px;
+}
+.cardd div:nth-child(3) {
+  margin-left: 7px;
+  width: 160px;
+}
+.cardd hr {
+  height: 80px;
+  width: 1px;
+  background-color: #c8c4c6;
+}
+.cardd div h4 {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+.cardd div h1 {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+}
 .charts {
   display: flex;
   flex-direction: row;
@@ -483,15 +537,21 @@
   }
   .filter-div {
     display: block;
+    justify-content: flex-start;
   }
   .filter {
-    margin-right: 40px;
+    margin-left: 3%;
+
+    justify-content: flex-start;
   }
   .date-dropdown {
     position: relative;
-    margin-left: 50px;
+    margin-left: 3%;
     margin-bottom: 40px;
     z-index: 1000;
+  }
+  .right-container {
+    left: 0;
   }
 
   .top-nav {
@@ -548,6 +608,7 @@
     margin-right: 6px;
     margin-bottom: 6px;
   }
+
   .cards-container {
     justify-content: center;
     flex-wrap: wrap;
@@ -589,6 +650,11 @@
     width: 90%;
   }
 }
+@media screen and (max-width: 786px) {
+  .cardd {
+    width: 94%;
+  }
+}
 
 @media screen and (max-width: 650px) and (min-width: 500px) {
   .filter-div {
@@ -602,6 +668,11 @@
   .filter-div {
     display: block;
     margin-top: -20px;
+  }
+}
+@media screen and (max-width: 432px) {
+  .cardd {
+    height: 120px;
   }
 }
 @media screen and (max-width: 506px) {

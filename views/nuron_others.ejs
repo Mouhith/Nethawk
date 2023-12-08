@@ -23,81 +23,107 @@
         </svg>
         Filter
       </p>
-      <div class="date-dropdown">
-        <label for="nuron" style="opacity: 1">Nuron : </label>
-        <select
-          id="nuron"
-          onchange="updateChart()"
-          style="width: 100%"
-          class="js-example-basic-multiple"
-          name="nuron[]"
-
-        >
-          <% data.forEach(date => { %>
-          <option value="<%- Object.keys(date)[0] %>">
-            <%- Object.keys(date)[0] %>
-          </option>
-          <% }); %>
-        </select>
-        <label for="other" style="opacity: 1"><%=isp%> : </label>
-        <select
-          id="other"
-          onchange="updateChart()"
-          style="width: 100%"
-          class="js-example-basic-multiple"
-          name="other[]"
-   
-        >
-          <% other_data.forEach(date => { %>
-          <option value="<%- Object.keys(date)[0] %>">
-            <%- Object.keys(date)[0] %>
-          </option>
-          <% }); %>
-        </select>
+      <div class="date-dropdown " style="margin-bottom: 20px;">
+        <div class="date-dropdownnnn">
+          <div>
+            <label for="nuron" style="opacity: 1">Nuron : </label>
+            <select
+              id="nuron"
+              onchange="updateChart()"
+              style="width: 100%;"
+              class="js-example-basic-multiple"
+              name="nuron[]" 
+    
+            >
+              <% data.forEach(date => { %>
+              <option value="<%- Object.keys(date)[0] %>">
+                <%- Object.keys(date)[0] %>
+              </option>
+              <% }); %>
+            </select>
+          </div>
+         <div>
+          <label for="other" style="opacity: 1; margin-top:10px;"><%=isp%> : </label>
+          <select
+            id="other"
+            onchange="updateChart()"
+            style="width: 100%; "
+            class="js-example-basic-multiple"
+            name="other[]"
+     
+          >
+            <% other_data.forEach(date => { %>
+            <option value="<%- Object.keys(date)[0] %>">
+              <%- Object.keys(date)[0] %>
+            </option>
+            <% }); %>
+          </select>
+         </div>
+        </div>
+        
+        
       </div>
     </div>
-    <div class="cards-container">
-      <div class="card" id="Upload_jitter">
-        <h4>Upload Jitter <span>(in ms)</span></h4>
-        <h1 id="uj"></h1>
+    <div class="cards-container cards-containerr">
+      <div class=" cardd " id="Upload_jitter">
+        <div>
+          <h4>Upload Jitter <span>(in ms)</span></h4>
+          <h1 id="uj"></h1>
+        </div>
+        <hr/>
+        <div>
+          <h4><%-isp%> Upload Jitter <span>(in ms)</span></h4>
+          <h1 id="ouj"></h1>
+        </div>
+        
       </div>
-      <div class="card" id="uplode_latency">
-        <h4>Upload Latency <span>(in ms)</span></h4>
-        <h1 id="ul"></h1>
+      <div class=" cardd " id="uplode_latency">
+        <div>
+          <h4>Upload Latency <span>(in ms)</span></h4>
+          <h1 id="ul"></h1>
+        </div>
+        <hr/>
+        <div>
+          <h4><%-isp%> Upload Latency <span>(in ms)</span></h4>
+          <h1 id="oul"></h1>
+        </div>
+        
       </div>
-      <div class="card" id="download_itter">
-        <h4>Download Jitter <span>(in ms)</span></h4>
-        <h1 id="dj"></h1>
+      <div class=" cardd " id="download_itter">
+        <div>
+          <h4>Download Jitter <span>(in ms)</span></h4>
+          <h1 id="dj"></h1>
+        </div>
+        <hr/>
+        <div>
+          <h4><%-isp%> Download Jitter <span>(in ms)</span></h4>
+          <h1 id="odj"></h1>
+        </div>
+        
       </div>
-      <div class="card" id="download_latency">
-        <h4>Download Latency <span>(in ms)</span></h4>
-        <h1 id="dl" class="dll"></h1>
-      </div>
-      <div class="card" id="packet_loss">
-        <h4>Packet Loss %</h4>
-        <h1 id="dp"></h1>
-      </div>
-      
-
-      <div class="card" id="Upload_jitter">
-        <h4><%-isp%> Upload Jitter <span>(in ms)</span></h4>
-        <h1 id="ouj"></h1>
-      </div>
-      <div class="card" id="uplode_latency">
-        <h4><%-isp%> Upload Latency <span>(in ms)</span></h4>
-        <h1 id="oul"></h1>
-      </div>
-      <div class="card" id="download_itter">
-        <h4><%-isp%> Download Jitter <span>(in ms)</span></h4>
-        <h1 id="odj"></h1>
-      </div>
-      <div class="card" id="download_latency">
-        <h4><%-isp%> Download Latency <span>(in ms)</span></h4>
+      <div class=" cardd " id="download_latency">
+        <div>
+          <h4>Download Latency <span>(in ms)</span></h4>
+          <h1 id="dl" class="dll"></h1>
+        </div>
+        <hr/>
+        <div>
+          <h4><%-isp%> Download Latency <span>(in ms)</span></h4>
         <h1 id="odl" class="dll"></h1>
+        </div>
+        
       </div>
-      <div class="card" id="packet_loss">
-        <h4><%-isp%> Packet Loss %</h4>
+      <div class=" cardd " id="packet_loss">
+        <div>
+          <h4>Packet Loss %</h4>
+        <h1 id="dp"></h1>
+        </div>
+        <hr/>
+        <div>
+          <h4><%-isp%> Packet Loss %</h4>
         <h1 id="odp"></h1>
+        </div>
+        
       </div>
     </div>
     <div class="charts-container">
