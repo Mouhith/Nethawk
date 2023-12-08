@@ -48,7 +48,8 @@ async function drawChart(selector1, selector2) {
     chartData,
     other_chartData,
     "chart_div",
-    "Time to Download 80 Mb of File"
+    "Time to Download 80 Mb of File",
+    "#bcacda"
   );
   await drawGraph(
     selector1,
@@ -56,7 +57,8 @@ async function drawChart(selector1, selector2) {
     speedDownloadAvgExclFileSlowstart,
     other_speedDownloadAvgExclFileSlowstart,
     "avg",
-    "Average Download speed (in Mb/s)"
+    "Average Download speed (in Mb/s)",
+    "#de97c3"
   );
   await drawGraph(
     selector1,
@@ -64,7 +66,8 @@ async function drawChart(selector1, selector2) {
     chartspeedDownloadPacketLoss,
     other_chartspeedDownloadPacketLoss,
     "packetloss",
-    "Peak Download Speed (in Mb/s)"
+    "Peak Download Speed (in Mb/s)",
+    "#452871"
   );
   // upload
   await drawGraph(
@@ -73,7 +76,8 @@ async function drawChart(selector1, selector2) {
     speedUploadDuration,
     other_speedUploadDuration,
     "up80",
-    "Time to Upload 80 Mb of File"
+    "Time to Upload 80 Mb of File",
+    "#e9c9de"
   );
   await drawGraph(
     selector1,
@@ -81,7 +85,8 @@ async function drawChart(selector1, selector2) {
     speedUploadAvgExclFileSlowstart,
     other_speedUploadAvgExclFileSlowstart,
     "avgupload",
-    "Average Upload speed (in Mb/s)"
+    "Average Upload speed (in Mb/s)",
+    "#eae3f4"
   );
   await drawGraph(
     selector1,
@@ -89,7 +94,8 @@ async function drawChart(selector1, selector2) {
     speedUploadFilePeak,
     other_speedUploadFilePeak,
     "peakupload",
-    "Peak Upload Speed (in Mb/s)"
+    "Peak Upload Speed (in Mb/s)",
+    "#c986b1"
   );
 
   //Streaming
@@ -100,7 +106,8 @@ async function drawChart(selector1, selector2) {
     streamPr,
     other_streamPr,
     "stream",
-    "Stream Quality Score"
+    "Stream Quality Score",
+    "#856bb1"
   );
   await drawGraph(
     selector1,
@@ -108,26 +115,43 @@ async function drawChart(selector1, selector2) {
     streamQualityPreloadingTime,
     other_streamQualityPreloadingTime,
     "loadtime",
-    "Loading Time of Stream"
+    "Loading Time of Stream",
+    "#d680b7"
   );
   await pidrawGraph(
     selector1,
     browserurl,
 
     "bw",
-    "Loading Time of Stream"
+    "nuron Avg Loading Time for websites (in ms)"
   );
   await pidrawGraph(
     selector2,
 
     other_browserurl,
     "obw",
-    "Loading Time of Stream"
+    `${isp} Avg Loading Time for websites (in ms)
+    `
   );
 }
 
-async function drawGraph(selector1, selector2, data1, data2, elementId, title) {
-  const value = await createGraph(selector1, selector2, data1, data2, title);
+async function drawGraph(
+  selector1,
+  selector2,
+  data1,
+  data2,
+  elementId,
+  title,
+  clor
+) {
+  const value = await createGraph(
+    selector1,
+    selector2,
+    data1,
+    data2,
+    title,
+    clor
+  );
   if (value) {
     drawAreaChart(elementId, value.data, value.options);
   }
@@ -249,7 +273,7 @@ $(document).ready(function () {
   $(".js-example-basic-multiple").select2();
 });
 
-async function createGraph(selector1, selector2, data1, data2, title) {
+async function createGraph(selector1, selector2, data1, data2, title, clor) {
   var dataTable = new google.visualization.DataTable();
   dataTable.addColumn("string", "Time");
 
@@ -275,11 +299,11 @@ async function createGraph(selector1, selector2, data1, data2, title) {
 
   dataTable.addRows(combinedData);
 
-  var options = getChartOptions(title);
+  var options = getChartOptions(title, clor);
   return { data: dataTable, options };
 }
 
-function getChartOptions(title) {
+function getChartOptions(title, clor) {
   return {
     title: title,
     titleTextStyle: {
@@ -318,7 +342,7 @@ function getChartOptions(title) {
     },
     series: {
       0: {
-        color: "red",
+        color: clor,
       },
       1: {
         color: "blue",
@@ -412,7 +436,12 @@ async function piechart(selectedDate, chartData, title) {
     "#FF33FF",
   ];
   const options = {
-    title: "Avg Loading Time for websites (in ms)",
+    title: title,
+    titleTextStyle: {
+      color: "#000",
+      fontSize: 16,
+      bottom: 30,
+    },
     // pieHole: 0.5,
     pieSliceTextStyle: {
       color: "black",
@@ -421,7 +450,7 @@ async function piechart(selectedDate, chartData, title) {
     width: 390,
 
     legend: {
-      title: "URLs",
+      position: "none",
     },
   };
 

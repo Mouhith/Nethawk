@@ -26,8 +26,9 @@ google.charts.setOnLoadCallback(() => {
   const parsdate = JSON.parse(chartData);
   if (parsdate != 0) {
     const lastValue = Object.keys(parsdate[parsdate.length - 1])[0];
-    $("#dateDropdown").val([lastValue]).trigger("change");
-    $("#dateDropdown1").val([lastValue]).trigger("change");
+    $("#dateDropdown").val([lastValue]);
+    let latestdate = [lastValue];
+    onfirstload(latestdate);
   }
 });
 
@@ -36,48 +37,61 @@ async function drawChart(selectedDate) {
     selectedDate,
     chartData,
     "chart_div",
-    "Time to Download 80 Mb of File"
+    "Time to Download 80 Mb of File",
+    "#bcacda"
   );
   await drawGraph(
     selectedDate,
     speedDownloadAvgExclFileSlowstart,
     "avg",
-    "Average Download speed (in Mb/s)"
+    "Average Download speed (in Mb/s)",
+    "#de97c3"
   );
   await drawGraph(
     selectedDate,
     chartspeedDownloadPacketLoss,
     "packetloss",
-    "Peak Download Speed (in Mb/s)"
+    "Peak Download Speed (in Mb/s)",
+    "#452871"
   );
   // upload
   await drawGraph(
     selectedDate,
     speedUploadDuration,
     "up80",
-    "Time to Upload 80 Mb of File"
+    "Time to Upload 80 Mb of File",
+    "#e9c9de"
   );
   await drawGraph(
     selectedDate,
     speedUploadAvgExclFileSlowstart,
     "avgupload",
-    "Average Upload speed (in Mb/s)"
+    "Average Upload speed (in Mb/s)",
+    "#eae3f4"
   );
   await drawGraph(
     selectedDate,
     speedUploadFilePeak,
     "peakupload",
-    "Peak Upload Speed (in Mb/s)"
+    "Peak Upload Speed (in Mb/s)",
+    "#c986b1"
   );
 
   //Streaming
 
-  await drawGraph(selectedDate, streamPr, "stream", "Stream Quality Score");
+  await drawGraph(
+    selectedDate,
+    streamPr,
+    "stream",
+    "Stream Quality Score",
+    "#856bb1"
+  );
   await drawGraph(
     selectedDate,
     streamQualityPreloadingTime,
     "loadtime",
-    "Loading Time of Stream"
+    "Loading Time of Stream",
+    "#d680b7"
   );
   await pidrawGraph(selectedDate, browserurl, "bw", "Loading Time of Stream");
   ///cards
@@ -115,8 +129,8 @@ async function drawChart(selectedDate) {
   }
 }
 
-async function drawGraph(selectedDate, data, elementId, title) {
-  const value = await createGraph(selectedDate, data, title);
+async function drawGraph(selectedDate, data, elementId, title, cline) {
+  const value = await createGraph(selectedDate, data, title, cline);
   if (value) {
     drawAreaChart(elementId, value.data, value.options);
   }
@@ -252,7 +266,7 @@ $(document).ready(function () {
   $(".js-example-basic-multiple").select2();
 });
 
-async function createGraph(selectedDate, chartData, title) {
+async function createGraph(selectedDate, chartData, title, cline) {
   if (selectedDate.length === 1) {
     var data = new google.visualization.DataTable();
     data.addColumn("string", "Time");
@@ -268,7 +282,7 @@ async function createGraph(selectedDate, chartData, title) {
       }
     });
 
-    var options = getChartOptions(title);
+    var options = getChartOptions(title, cline);
     return { data, options };
   } else if (selectedDate.length > 1) {
     var dataTable = new google.visualization.DataTable();
@@ -292,12 +306,13 @@ async function createGraph(selectedDate, chartData, title) {
     var combinedData = combineData(selectedDate, ...va);
     dataTable.addRows(combinedData);
 
-    var options = getChartOptions(title);
+    var options = getChartOptions(title, cline);
     return { data: dataTable, options };
   }
 }
 
-function getChartOptions(title) {
+function getChartOptions(title, cline) {
+  console.log(cline);
   return {
     title: title,
     titleTextStyle: {
@@ -335,12 +350,10 @@ function getChartOptions(title) {
       duration: 1000,
       easing: "inAndOut",
     },
+
     series: {
       0: {
-        color: "red",
-      },
-      1: {
-        color: "blue",
+        color: cline,
       },
     },
   };
@@ -441,7 +454,7 @@ async function piechart(selectedDate, chartData, title) {
     width: 390,
 
     legend: {
-      title: "URLs",
+      position: "none",
     },
     titleTextStyle: {
       color: "#000",
@@ -528,4 +541,44 @@ async function bargraph(selectedDate, chartData, title) {
   };
 
   return { data, options };
+}
+
+function onfirstload(selectedDates) {
+  console.log(selectedDates);
+  const uj = document.getElementById("uj");
+  const ul = document.getElementById("ul");
+  const dj = document.getElementById("dj");
+  const dl = document.getElementById("dl");
+  const dp = document.getElementById("dp");
+  updateElementText(
+    uj,
+    speedUploadLoadedJitter[selectedDates[0]]
+      ? speedUploadLoadedJitter[selectedDates[0]].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    ul,
+    speedUploadLoadedLatency[selectedDates[0]]
+      ? speedUploadLoadedLatency[selectedDates[0]].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    dj,
+    speedDownloadLoadedJitter[selectedDates[0]]
+      ? speedDownloadLoadedJitter[selectedDates[0]].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    dl,
+    speedDownloadLoadedLatency[selectedDates[0]]
+      ? speedDownloadLoadedLatency[selectedDates[0]].toFixed(2)
+      : "NuN"
+  );
+  updateElementText(
+    dp,
+    speedDownloadPacketLoss[selectedDates[0]]
+      ? speedDownloadPacketLoss[selectedDates[0]].toFixed(2)
+      : "NuN"
+  );
+  drawChart(selectedDates);
 }
