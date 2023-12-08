@@ -51,10 +51,10 @@ app.use((err, req, res, next) => {
     message = err.errors[0].message;
   }
 
-  res.status(status).json({ error: message });
+  res.status(status).render("500");
 });
 app.use((req, res, next) => {
-  res.status(404).send("Not Found");
+  res.status(404).render("404");
 });
 // Define associations
 User_credentials.hasOne(Employee);

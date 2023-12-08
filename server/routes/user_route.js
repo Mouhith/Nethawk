@@ -7,7 +7,7 @@ route.get("/", user_conroller.login);
 route.get("/logout", user_conroller.logout);
 route.post("/login", user_conroller.postLogin);
 route.post("/otp", user_conroller.otpVerification);
-route.get("/dashboard", userAuth, user_conroller.getDashboard);
+// route.get("/dashboard", userAuth, user_conroller.getDashboard);
 route.get("/dashboard/nuron", userAuth, user_conroller.getDashboard_nuron);
 route.get("/dashboard/others", userAuth, user_conroller.getDashboard_others);
 

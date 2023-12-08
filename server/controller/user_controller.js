@@ -104,34 +104,6 @@ exports.otpVerification = async (req, res, next) => {
   }
 };
 
-exports.getDashboard = async (req, res, next) => {
-  try {
-    const linkURL = false;
-    const dashboard_id = process.env.SUPER_SET_NURON_DASHBOARD_ID;
-    const data = await crypto.decryption(req.cookie);
-    const token = await getToken(data.S_id, linkURL, dashboard_id);
-    ///
-
-    const dat = await Results.findAll({
-      attributes: ["dates"],
-
-      where: {
-        scheduling_name: data.S_id,
-      },
-    });
-    const array = dat.map((result) => result.dataValues.dates);
-    const newset = new Set(array);
-    if (newset.size > 1) {
-      linkURL = true;
-    }
-    res
-      .status(200)
-      .render("dashboard", { token: token, linkURL, name: "Nuron" });
-  } catch (error) {
-    next(error);
-  }
-};
-
 exports.logout = async (req, res, next) => {
   try {
     res.clearCookie("NU-NLIC");
@@ -143,8 +115,9 @@ exports.logout = async (req, res, next) => {
 
 exports.getDashboard_others = async (req, res, next) => {
   try {
+    const cooki = await crypto.decryption(req.cookie);
     const result = await Results.findAll({
-      where: { scheduling_name: "nuron" },
+      where: { scheduling_name: cooki.S_id },
     });
     const {
       data,
@@ -182,8 +155,9 @@ exports.getDashboard_others = async (req, res, next) => {
 
 exports.getnuron_others = async (req, res, next) => {
   try {
+    const cooki = await crypto.decryption(req.cookie);
     const result = await Results.findAll({
-      where: { scheduling_name: "nuron" },
+      where: { scheduling_name: cooki.S_id },
     });
     const [nuron, otherisp] = await Promise.all([
       nuronchartData(result),
@@ -226,8 +200,9 @@ exports.getnuron_others = async (req, res, next) => {
 
 exports.getDashboard_nuron = async (req, res, next) => {
   try {
+    const cooki = await crypto.decryption(req.cookie);
     const result = await Results.findAll({
-      where: { scheduling_name: "Mth" },
+      where: { scheduling_name: cooki.S_id },
     });
     const {
       data,

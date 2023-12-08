@@ -1,8 +1,9 @@
 <%- include('partials/header') -%>
 
 <div class="right-container">
+  <% if(data.length!=0){%>
   <div class="container2">
-    <% if(data.length!=0){%>
+   
     <div class="filter-div">
       <p class="filter" onclick="displayDrpdwn()">
         <svg
@@ -162,10 +163,12 @@
       </div>
     </div>
   </div>
-  <%} else{%>
-    <h1 class="error">No data found...</h1>
-        <%} %>
 </div>
+  <%} else{%>
+    <div style="background-image: url(/images/nodata.png); height: 100vh; min-width: 100%;background-repeat: no-repeat;background-size: contain;background-position: center" class="container2">
+      <div>
+    <%} %>
+
 <!-- charts div -->
 </div>
 <!-- content div -->
